@@ -455,22 +455,36 @@ button.list-item:active {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  max-height: 88vh;
+  max-height: 92vh;
   padding-bottom: var(--safe-bottom);
   box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.5);
   animation: slideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+/* Pulled up via the handle → occupy (almost) the full screen. */
+.modal-sheet.expanded {
+  height: 92vh;
 }
 .modal-handle {
   display: flex;
   justify-content: center;
-  padding: 10px 0;
+  align-items: center;
+  /* Bigger touch target so the grabber is easy to pull. */
+  padding: 12px 0 10px;
   flex-shrink: 0;
+  cursor: grab;
+  touch-action: none; /* let us handle the drag instead of the browser scrolling */
+}
+.modal-handle:active {
+  cursor: grabbing;
 }
 .modal-handle span {
-  width: 36px;
-  height: 4px;
+  width: 40px;
+  height: 5px;
   border-radius: var(--r-pill);
-  background: var(--border);
+  background: var(--text-muted);
 }
 .modal-header {
   display: flex;

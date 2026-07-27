@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Search, X, ChevronDown, ChevronRight, Trash2, Inbox, Plus } from 'lucide-react';
 import './ui.css';
 
@@ -322,13 +322,63 @@ export function AppToggle({ value, onValueChange, onChange }) {
   );
 }
 
-/* ── Modal (bottom sheet) ── */
-export function AppModal({ visible = false, onClose, title, children, footer, style }) {
+/* ── Modal (bottom sheet, draggable handle) ── */
+export function AppModal({ visible = false, onClose, title, children, footer, style, expanded: expandedProp = false }) {
+  const [dragY, setDragY] = useState(0);
+  const [expanded, setExpanded] = useState(expandedProp);
+  const drag = useRef(null);
+
+  // Reset drag/expand state each time the sheet opens.
+  useEffect(() => {
+    if (visible) {
+      setDragY(0);
+      setExpanded(expandedProp);
+    }
+  }, [visible, expandedProp]);
+
   if (!visible) return null;
+
+  const onPointerDown = (e) => {
+    drag.current = { startY: e.clientY, dy: 0 };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+  const onPointerMove = (e) => {
+    if (!drag.current) return;
+    const dy = e.clientY - drag.current.startY;
+    drag.current.dy = dy;
+    // Follow the finger downward; allow a small rubber-band upward.
+    setDragY(dy > 0 ? dy : Math.max(dy, -48));
+  };
+  const onPointerUp = () => {
+    const dy = drag.current?.dy || 0;
+    drag.current = null;
+    if (dy > 120) {
+      onClose?.(); // pulled down far enough → dismiss
+      return;
+    }
+    if (dy < -40) setExpanded(true); // pulled up → expand to full height
+    else if (dy > 40 && expanded) setExpanded(false); // pulled down → collapse
+    setDragY(0);
+  };
+
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-sheet" style={style} onClick={(e) => e.stopPropagation()}>
-        <div className="modal-handle">
+      <div
+        className={cx('modal-sheet', expanded && 'expanded')}
+        style={{
+          ...style,
+          transform: dragY ? `translateY(${dragY}px)` : undefined,
+          transition: dragY ? 'none' : undefined,
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div
+          className="modal-handle"
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+        >
           <span />
         </div>
         {title && (

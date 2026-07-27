@@ -534,12 +534,12 @@ export default function FolderDetailScreen() {
       </AppModal>
 
       {/* Assign Holder Modal */}
-      <AppModal visible={isAssignModalVisible} onClose={() => setIsAssignModalVisible(false)} title="Assign Folder Custody">
+      <AppModal visible={isAssignModalVisible} onClose={() => setIsAssignModalVisible(false)} title="Assign Folder Custody" expanded>
         <p className="t-body-secondary" style={{ marginTop: 0, marginBottom: 16 }}>
           Select a team member to take custody and accountability for this folder and its contents.
         </p>
         <AppSearchBar placeholder="Search team members..." value={assignSearchQuery} onChangeText={setAssignSearchQuery} />
-        <div style={{ maxHeight: 320, overflowY: 'auto' }}>
+        <div>
           {activeUsers.length === 0 ? (
             <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 20 }}>No matching users found.</p>
           ) : (
