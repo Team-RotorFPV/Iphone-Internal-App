@@ -1,0 +1,280 @@
+/* Shared screen styles */
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Admin dashboard module card */
+.module-card {
+  height: 124px;
+  padding: var(--sp-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 0;
+}
+.module-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.module-iconbox {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+}
+.module-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.module-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Header block used by list screens */
+.screen-header {
+  margin-bottom: var(--sp-xl);
+}
+
+/* Stat pills row */
+.stat-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: var(--sp-lg);
+}
+.stat-pill {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px;
+  text-align: center;
+}
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-top: 2px;
+}
+
+/* Thumbnails */
+.thumb {
+  border-radius: var(--r-sm);
+  object-fit: cover;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+}
+
+/* Meta line */
+.meta-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Segmented control */
+.segmented {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 3px;
+  margin-bottom: var(--sp-lg);
+  gap: 3px;
+}
+.segmented button {
+  flex: 1;
+  padding: 8px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.segmented button.active {
+  background: var(--accent-muted);
+  color: var(--accent);
+}
+
+/* Detail rows */
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.detail-row:last-child {
+  border-bottom: none;
+}
+.detail-label {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.detail-value {
+  font-weight: 600;
+  text-align: right;
+  font-size: 14px;
+}
+
+/* Avatar */
+.avatar {
+  border-radius: var(--r-pill);
+  object-fit: cover;
+  background: var(--elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-weight: 700;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Image upload tile */
+.upload-tile {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-md);
+  border: 1px dashed var(--border);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-muted);
+  overflow: hidden;
+}
+.upload-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Chips scroll row */
+.chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: var(--sp-md);
+}
+
+/* "Held by You" section on the inventory list */
+.held-section {
+  padding-bottom: 14px;
+}
+.held-title {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+/* Folder detail tab chips (horizontal scroll) */
+.folder-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.folder-tabs .chip {
+  flex-shrink: 0;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 10px 0;
+  margin-bottom: 8px;
+}
+.crumb-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+}
+.crumb-sep {
+  color: var(--text-muted);
+  margin: 0 6px;
+  font-size: 12px;
+}
+.crumb-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.crumb-active {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* Bulk action bar (floats above the tab bar) */
+.bulk-bar {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: calc(var(--tabbar-height) + var(--safe-bottom) + 28px);
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px var(--sp-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 90;
+}
+
+/* Tag select card (team members modal) */
+.tag-select-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  font-size: 15px;
+}
+
+/* clickable subtle link row */
+.link-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+}

@@ -1,0 +1,67 @@
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.grid-card {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--elevated);
+  padding: 0;
+}
+.grid-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.grid-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+}
+.grid-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: rgba(9, 9, 11, 0.8);
+  border-top: 1px solid rgba(42, 41, 61, 0.5);
+}
+.order-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.overlay-actions {
+  display: flex;
+  gap: 6px;
+}
+.ov-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 13px;
+  background: rgba(148, 163, 184, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ov-btn.danger {
+  background: rgba(239, 68, 68, 0.19);
+}
