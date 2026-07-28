@@ -69,7 +69,11 @@
 .screen-body {
   flex: 1;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  /* NOTE: intentionally NOT using `-webkit-overflow-scrolling: touch` here.
+     On iOS it turns this scroll container into a compositing layer that traps
+     `position: fixed` descendants (FAB, bulk-action bar), making them render
+     behind / scroll with the content. Modern iOS keeps momentum scrolling
+     without it. */
   overscroll-behavior-y: contain;
 }
 .screen-content {

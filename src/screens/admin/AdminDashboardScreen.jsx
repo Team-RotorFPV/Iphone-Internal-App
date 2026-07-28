@@ -8,6 +8,7 @@ import {
   Calendar,
   MessageSquare,
   UserCog,
+  Share2,
   ChevronRight,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
@@ -24,6 +25,7 @@ const adminModules = [
   { title: 'Events', path: '/admin/events', icon: Calendar, permission: 'board', color: '#10B981', desc: 'Schedule & RSVP' },
   { title: 'Messages', path: '/admin/messages', icon: MessageSquare, permission: 'board', color: '#6366F1', desc: 'Inquiries & inbox' },
   { title: 'Team Members', path: '/admin/team-members', icon: UserCog, permission: 'superAdmin', color: '#8B5CF6', desc: 'Roster & permissions' },
+  { title: 'Socials', path: '/admin/socials', icon: Share2, permission: 'board', color: '#F472B6', desc: 'Footer & link tree' },
 ];
 
 export default function AdminDashboardScreen() {

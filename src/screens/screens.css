@@ -179,6 +179,22 @@
   margin-bottom: var(--sp-md);
 }
 
+/* "Open Sheet" pill in the inventory app bar */
+.sheet-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--accent);
+  background: rgba(139, 92, 246, 0.08);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 /* "Held by You" section on the inventory list */
 .held-section {
   padding-bottom: 14px;
@@ -253,6 +269,27 @@
   gap: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   z-index: 90;
+}
+
+/* Social icon picker grid */
+.icon-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.icon-tile {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: var(--elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-tile.selected {
+  border-color: var(--accent);
+  background: rgba(139, 92, 246, 0.12);
 }
 
 /* Tag select card (team members modal) */

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Folder, Archive, ArchiveRestore, Box, User, Layers, ShieldAlert } from 'lucide-react';
+import { Folder, Archive, ArchiveRestore, Box, User, Layers, ShieldAlert, Table } from 'lucide-react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../../firebase';
 import { InventoryService } from '../../services/inventory';
 import { UsersService } from '../../services/users';
 import { useAuthStore } from '../../stores/authStore';
@@ -18,6 +20,11 @@ import {
 import Screen from '../../components/Screen';
 import { alertConfirm, toast } from '../../lib/toast';
 import '../screens.css';
+
+// Mirrors the inventory website's OpenSheetButton: reads `sheetUrl` and
+// `enabled` off settings/google_sheets, only shows when enabled, and falls
+// back to the generic Sheets URL when no specific link is set.
+const SHEETS_FALLBACK_URL = 'https://docs.google.com/spreadsheets';
 
 const iconBox = (child, muted) => (
   <div
@@ -39,11 +46,34 @@ export default function InventoryListsScreen() {
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [newListName, setNewListName] = useState('');
   const [activeTab, setActiveTab] = useState('active');
+  const [sheetUrl, setSheetUrl] = useState('');
+  const [sheetEnabled, setSheetEnabled] = useState(false);
 
   const hasPermission = useAuthStore((s) => s.hasPermission);
   const user = useAuthStore((s) => s.user);
   const hasInventoryPermission = hasPermission('inventory');
   const myEmail = (user?.email || '').toLowerCase();
+
+  // Live-track the Google Sheets config, exactly like the website's
+  // OpenSheetButton — the button appears only while the integration is enabled.
+  useEffect(() => {
+    if (!hasInventoryPermission) return;
+    const unsub = onSnapshot(
+      doc(db, 'settings', 'google_sheets'),
+      (snap) => {
+        const data = snap.exists() ? snap.data() : {};
+        setSheetUrl(data.sheetUrl || '');
+        setSheetEnabled(data.enabled || false);
+      },
+      () => setSheetEnabled(false)
+    );
+    return () => unsub();
+  }, [hasInventoryPermission]);
+
+  const handleOpenSheet = () => {
+    const opened = window.open(sheetUrl || SHEETS_FALLBACK_URL, '_blank', 'noopener');
+    if (!opened) toast.error('The linked Google Sheet could not be opened.');
+  };
 
   useEffect(() => {
     if (!hasInventoryPermission) {
@@ -294,7 +324,17 @@ export default function InventoryListsScreen() {
   }
 
   return (
-    <Screen title="Inventory">
+    <Screen
+      title="Inventory"
+      headerRight={
+        sheetEnabled ? (
+          <button type="button" className="sheet-btn" onClick={handleOpenSheet}>
+            <Table size={16} color="var(--accent)" />
+            <span>Open Sheet</span>
+          </button>
+        ) : null
+      }
+    >
       <AppSearchBar
         value={searchQuery}
         onChangeText={setSearchQuery}

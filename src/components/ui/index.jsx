@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Search, X, ChevronDown, ChevronRight, Trash2, Inbox, Plus } from 'lucide-react';
 import './ui.css';
 
@@ -361,7 +362,7 @@ export function AppModal({ visible = false, onClose, title, children, footer, st
     setDragY(0);
   };
 
-  return (
+  return createPortal(
     <div className="modal-backdrop" onClick={onClose}>
       <div
         className={cx('modal-sheet', expanded && 'expanded')}
@@ -394,6 +395,7 @@ export function AppModal({ visible = false, onClose, title, children, footer, st
         <div className="modal-body">{children}</div>
         {footer && <div className="modal-footer">{footer}</div>}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

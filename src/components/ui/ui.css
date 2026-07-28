@@ -117,13 +117,18 @@ button.card:active {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 6px 14px;
+  height: 34px;
   border-radius: var(--r-pill);
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text-secondary);
   font-size: 13px;
   font-weight: 600;
+  /* Never wrap the label — keeps every pill the same height and lets it grow
+     with the text instead of breaking onto two lines. */
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: background 0.12s ease, border-color 0.12s ease;
 }
 .chip-selected {
@@ -440,7 +445,9 @@ button.list-item:active {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  z-index: 500;
+  /* Above the bottom nav (60), app bar (50), FAB (100), bulk bar (90),
+     and toasts (800). Portaled to <body> so no scroll container can trap it. */
+  z-index: 1200;
   animation: fadeIn 0.2s ease;
 }
 .modal-sheet {

@@ -21,6 +21,7 @@ import ManageTeamScreen from './screens/admin/ManageTeamScreen';
 import ManageEventsScreen from './screens/admin/ManageEventsScreen';
 import ManageContactMessagesScreen from './screens/admin/ManageContactMessagesScreen';
 import ManageTeamMembersScreen from './screens/admin/ManageTeamMembersScreen';
+import ManageSocialsScreen from './screens/admin/ManageSocialsScreen';
 import ProfileScreen from './screens/profile/ProfileScreen';
 
 function Shell() {
@@ -75,6 +76,7 @@ export default function App() {
               <Route path="/admin/events" element={<ManageEventsScreen />} />
               <Route path="/admin/messages" element={<ManageContactMessagesScreen />} />
               <Route path="/admin/team-members" element={<ManageTeamMembersScreen />} />
+              <Route path="/admin/socials" element={<ManageSocialsScreen />} />
 
               <Route path="/profile" element={<ProfileScreen />} />
 
