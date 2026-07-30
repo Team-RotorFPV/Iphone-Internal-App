@@ -60,6 +60,18 @@ export const InventoryService = {
     });
   },
 
+  // ─── ONE-SHOT GETTERS ─────────────────────────────────────────────
+
+  getInventory: async (inventoryId) => {
+    const snap = await getDoc(doc(db, 'inventories', inventoryId));
+    return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+  },
+
+  getItem: async (itemId) => {
+    const snap = await getDoc(doc(db, 'items', itemId));
+    return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+  },
+
   // ─── LIST CRUD ────────────────────────────────────────────────────
 
   addList: async (name) => {
@@ -305,6 +317,96 @@ export const InventoryService = {
     });
 
     await logInventoryAction('holder_assigned', currentHolder || 'None', newHolderEmail);
+  },
+
+  // ─── INVENTORY (FOLDER) SELF-CUSTODY ──────────────────────────────
+  // "Hold this" for a folder/sub-folder: the acting user becomes the explicit
+  // holder. Releasing clears the explicit holder so it reverts to inheriting an
+  // ancestor folder's holder (see lib/custody.js).
+
+  holdInventory: async (inventoryId, holderEmail, room) => {
+    const invDoc = await getDoc(doc(db, 'inventories', inventoryId));
+    const d = invDoc.data() || {};
+    await InventoryService.assignHolder(
+      inventoryId,
+      holderEmail,
+      room || d.currentRoom || 'Unknown',
+      d.currentHolder,
+      d.currentRoom,
+      d.currentAssignedDate,
+      holderEmail
+    );
+  },
+
+  releaseInventory: async (inventoryId) => {
+    // Marking Available clears the explicit holder and closes open hold history.
+    await InventoryService.updateInventoryStatus(inventoryId, 'Available');
+  },
+
+  // ─── ITEM CUSTODY ─────────────────────────────────────────────────
+  // An explicit item holder overrides the inherited folder holder; releasing it
+  // reverts the item to inheriting its parent folder's holder. Effective holder
+  // is computed in lib/custody.js, never denormalised.
+
+  holdItem: async (itemId, holderEmail) => {
+    const userEmail = getUserEmail();
+    const now = new Date().toISOString();
+
+    const itemDoc = await getDoc(doc(db, 'items', itemId));
+    const itemData = itemDoc.data();
+    const previousHolder = itemData?.currentHolder || null;
+
+    await updateDoc(doc(db, 'items', itemId), {
+      currentHolder: holderEmail,
+      currentHolderSince: now,
+      previousHolder,
+      updatedAt: now,
+      updatedBy: userEmail,
+    });
+
+    await addDoc(collection(db, 'item_history'), {
+      itemId,
+      inventoryId: itemData?.inventoryId,
+      itemName: itemData?.name,
+      action: 'held',
+      previousHolder,
+      newHolder: holderEmail,
+      userId: userEmail,
+      timestamp: now,
+    });
+
+    await logInventoryAction('item_held', previousHolder || 'None', holderEmail);
+  },
+
+  releaseItem: async (itemId) => {
+    const userEmail = getUserEmail();
+    const now = new Date().toISOString();
+
+    const itemDoc = await getDoc(doc(db, 'items', itemId));
+    const itemData = itemDoc.data();
+    const previousHolder = itemData?.currentHolder || null;
+
+    // Clearing the explicit holder reverts the item to inheriting its folder.
+    await updateDoc(doc(db, 'items', itemId), {
+      currentHolder: null,
+      currentHolderSince: null,
+      previousHolder,
+      updatedAt: now,
+      updatedBy: userEmail,
+    });
+
+    await addDoc(collection(db, 'item_history'), {
+      itemId,
+      inventoryId: itemData?.inventoryId,
+      itemName: itemData?.name,
+      action: 'released',
+      previousHolder,
+      newHolder: null,
+      userId: userEmail,
+      timestamp: now,
+    });
+
+    await logInventoryAction('item_released', previousHolder || 'None', null);
   },
 
   // ─── ITEM CRUD ────────────────────────────────────────────────────

@@ -18,6 +18,7 @@ import {
   AppEmptyState,
 } from '../../components/ui';
 import Screen from '../../components/Screen';
+import InventoryScanButton from '../../components/InventoryScanButton';
 import { alertConfirm, toast } from '../../lib/toast';
 import '../screens.css';
 
@@ -327,12 +328,15 @@ export default function InventoryListsScreen() {
     <Screen
       title="Inventory"
       headerRight={
-        sheetEnabled ? (
-          <button type="button" className="sheet-btn" onClick={handleOpenSheet}>
-            <Table size={16} color="var(--accent)" />
-            <span>Open Sheet</span>
-          </button>
-        ) : null
+        <>
+          <InventoryScanButton surface="home" variant="compact" allInvs={allInvs} />
+          {sheetEnabled && (
+            <button type="button" className="sheet-btn" onClick={handleOpenSheet}>
+              <Table size={16} color="var(--accent)" />
+              <span>Open Sheet</span>
+            </button>
+          )}
+        </>
       }
     >
       <AppSearchBar

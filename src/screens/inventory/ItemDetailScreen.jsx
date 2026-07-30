@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import { Box, Edit2, Trash2, Clock, User, Tag, Hash, Check } from 'lucide-react';
+import { Box, Edit2, Trash2, Clock, User, Tag, Hash, Check, UserCheck, CornerDownRight } from 'lucide-react';
 import { InventoryService } from '../../services/inventory';
+import { UsersService } from '../../services/users';
+import { useAuthStore } from '../../stores/authStore';
+import AttachTagModal from '../../components/AttachTagModal';
+import { resolveEffectiveHolder } from '../../lib/custody';
+import { getHolderName } from '../../lib/inventoryHelpers';
 import { AppCard, AppSection, AppButton, AppInput, AppBadge, AppSkeleton } from '../../components/ui';
 import Screen from '../../components/Screen';
 import { alertConfirm, toast } from '../../lib/toast';
@@ -12,11 +17,16 @@ export default function ItemDetailScreen() {
   const location = useLocation();
   const navigate = useNavigate();
   const initialItemData = location.state?.itemData || null;
+  const myEmail = useAuthStore((s) => s.user?.email);
 
   const [item, setItem] = useState(initialItemData);
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({ name: '', quantity: '0', category: '' });
   const [saving, setSaving] = useState(false);
+  const [custodyBusy, setCustodyBusy] = useState(false);
+  const [tagModalOpen, setTagModalOpen] = useState(false);
+  const [allInvs, setAllInvs] = useState([]);
+  const [usersList, setUsersList] = useState([]);
 
   useEffect(() => {
     const inventoryId = initialItemData?.inventoryId;
@@ -25,8 +35,55 @@ export default function ItemDetailScreen() {
       const found = items.find((i) => i.id === itemId);
       if (found) setItem(found);
     });
-    return () => unsubscribe();
+    const unsubInvs = InventoryService.subscribeToAllInventories(setAllInvs);
+    const unsubUsers = UsersService.subscribeToUsers(setUsersList);
+    return () => {
+      unsubscribe();
+      unsubInvs();
+      unsubUsers();
+    };
   }, [itemId, initialItemData]);
+
+  // Custody: an item can be held on its own. An explicit holder overrides the
+  // inherited folder holder; releasing reverts it.
+  const holderInfo = resolveEffectiveHolder(item, 'item', allInvs);
+  const iHoldExplicitly = item?.currentHolder && item.currentHolder === myEmail;
+
+  const doHold = async () => {
+    try {
+      setCustodyBusy(true);
+      await InventoryService.holdItem(itemId, myEmail);
+    } catch (error) {
+      console.error('Error holding item:', error);
+      toast.error('Could not hold this item. Please try again.');
+    } finally {
+      setCustodyBusy(false);
+    }
+  };
+
+  const handleHold = () => {
+    if (item?.currentHolder && item.currentHolder !== myEmail) {
+      alertConfirm({
+        title: 'Take custody?',
+        message: `This item is currently held by ${getHolderName(item.currentHolder, usersList)}. Take it anyway?`,
+        confirmLabel: 'Take it',
+        onConfirm: doHold,
+      });
+    } else {
+      doHold();
+    }
+  };
+
+  const handleRelease = async () => {
+    try {
+      setCustodyBusy(true);
+      await InventoryService.releaseItem(itemId);
+    } catch {
+      toast.error('Could not release this item. Please try again.');
+    } finally {
+      setCustodyBusy(false);
+    }
+  };
 
   const handleEditToggle = () => {
     if (!isEditing && item) {
@@ -174,6 +231,40 @@ export default function ItemDetailScreen() {
             </AppCard>
           </div>
 
+          <AppSection title="Custody" style={{ marginTop: 18 }}>
+            <div className="row-between">
+              <div className="grow">
+                <div className="detail-label">Held by</div>
+                <div className="t-body" style={{ fontWeight: 600, marginTop: 2 }}>
+                  {holderInfo.holder ? getHolderName(holderInfo.holder, usersList) : 'Unassigned'}
+                </div>
+                {holderInfo.source === 'inherited' && (
+                  <div className="meta-line" style={{ marginTop: 2 }}>
+                    <CornerDownRight size={12} /> via {holderInfo.from?.name || 'parent folder'}
+                  </div>
+                )}
+              </div>
+              {iHoldExplicitly ? (
+                <AppButton variant="secondary" size="sm" onClick={handleRelease} loading={custodyBusy}>
+                  Release
+                </AppButton>
+              ) : (
+                <AppButton variant="primary" size="sm" onClick={handleHold} loading={custodyBusy} icon={<UserCheck size={14} color="#09090B" />}>
+                  Hold this
+                </AppButton>
+              )}
+            </div>
+            <div className="detail-row" style={{ marginTop: 12 }}>
+              <span className="detail-label">QR Tag</span>
+              <span className="row gap-sm">
+                <span className="detail-value" style={{ fontFamily: 'monospace' }}>{item.activeTagId || 'None'}</span>
+                <AppButton variant="ghost" size="sm" onClick={() => setTagModalOpen(true)}>
+                  {item.activeTagId ? 'Replace' : 'Attach'}
+                </AppButton>
+              </span>
+            </div>
+          </AppSection>
+
           <AppSection title="Audit & Lifecycle Metadata" style={{ marginTop: 18 }}>
             <MetaRow label="Created By" value={item.createdBy || 'System'} icon={<User size={14} color="var(--text-muted)" />} />
             <MetaRow label="Created At" value={formatDate(item.createdAt)} icon={<Clock size={14} color="var(--text-muted)" />} />
@@ -184,6 +275,13 @@ export default function ItemDetailScreen() {
           </AppSection>
         </>
       )}
+
+      <AttachTagModal
+        visible={tagModalOpen}
+        mode={item.activeTagId ? 'replace' : 'attach'}
+        entity={{ type: 'item', id: itemId, name: item.name }}
+        onClose={() => setTagModalOpen(false)}
+      />
     </Screen>
   );
 }

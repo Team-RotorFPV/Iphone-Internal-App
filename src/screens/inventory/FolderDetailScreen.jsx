@@ -14,12 +14,18 @@ import {
   UserCheck,
   CheckCircle2,
   AlertTriangle,
+  CornerDownRight,
+  QrCode,
 } from 'lucide-react';
 import { InventoryService } from '../../services/inventory';
 import { UsersService } from '../../services/users';
 import { useAuthStore } from '../../stores/authStore';
 import MoveDestinationModal from '../../components/MoveDestinationModal';
 import ExportModal from '../../components/ExportModal';
+import InventoryScanButton from '../../components/InventoryScanButton';
+import AttachTagModal from '../../components/AttachTagModal';
+import BulkScanModal from '../../components/BulkScanModal';
+import { resolveEffectiveHolder } from '../../lib/custody';
 import {
   AppCard,
   AppSection,
@@ -80,6 +86,10 @@ export default function FolderDetailScreen() {
   const [isMoveModalVisible, setIsMoveModalVisible] = useState(false);
   const [isExportVisible, setIsExportVisible] = useState(false);
   const [isActionsModalVisible, setIsActionsModalVisible] = useState(false);
+  const [custodyBusy, setCustodyBusy] = useState(false);
+  const [attachTarget, setAttachTarget] = useState(null);
+  const [replaceVisible, setReplaceVisible] = useState(false);
+  const [bulkScanVisible, setBulkScanVisible] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -103,6 +113,44 @@ export default function FolderDetailScreen() {
   const currentInventory = allInvs.find((i) => i.id === inventoryId) || {};
   const itemCountFor = (invId) => calculateDescendantItemCount(invId, allInvs, allItems);
   const holderNameFor = (email) => getHolderName(email, usersList);
+
+  // Self-custody for the folder. Explicit holder overrides inherited; releasing
+  // reverts to the parent folder's holder (see lib/custody.js).
+  const doHoldFolder = async () => {
+    try {
+      setCustodyBusy(true);
+      await InventoryService.holdInventory(inventoryId, user?.email, user?.roomNumber);
+    } catch (e) {
+      console.error('Error holding folder:', e);
+      toast.error('Could not hold this folder. Please try again.');
+    } finally {
+      setCustodyBusy(false);
+    }
+  };
+
+  const handleHoldFolder = () => {
+    if (currentInventory.currentHolder && currentInventory.currentHolder !== user?.email) {
+      alertConfirm({
+        title: 'Take custody?',
+        message: `This folder is currently held by ${holderNameFor(currentInventory.currentHolder)}. Take it anyway?`,
+        confirmLabel: 'Take it',
+        onConfirm: doHoldFolder,
+      });
+    } else {
+      doHoldFolder();
+    }
+  };
+
+  const handleReleaseFolder = async () => {
+    try {
+      setCustodyBusy(true);
+      await InventoryService.releaseInventory(inventoryId);
+    } catch {
+      toast.error('Could not release this folder. Please try again.');
+    } finally {
+      setCustodyBusy(false);
+    }
+  };
 
   const goFolder = (item) => navigate(`/inventory/folder/${item.id}`, { state: { inventoryName: item.name } });
   const goItem = (item) => navigate(`/inventory/item/${item.id}`, { state: { itemData: item } });
@@ -179,15 +227,67 @@ export default function FolderDetailScreen() {
               <AppBadge variant={getStatusBadgeVariant(status)}>{status}</AppBadge>
             </div>
           </div>
-          <AppButton
-            variant="secondary"
-            size="sm"
-            icon={<MoreVertical size={16} />}
-            onClick={() => setIsActionsModalVisible(true)}
-          >
-            Actions
-          </AppButton>
+          <div className="row gap-sm">
+            <InventoryScanButton
+              surface="folder"
+              variant="compact"
+              containerId={inventoryId}
+              allInvs={allInvs}
+              bindCandidates={[
+                ...subInventories.map((inv) => ({ type: 'inventory', id: inv.id, name: inv.name })),
+                ...items.map((it) => ({ type: 'item', id: it.id, name: it.name })),
+              ]}
+            />
+            <AppButton
+              variant="secondary"
+              size="sm"
+              icon={<MoreVertical size={16} />}
+              onClick={() => setIsActionsModalVisible(true)}
+            >
+              Actions
+            </AppButton>
+          </div>
         </div>
+
+        {(() => {
+          const effectiveHolder = resolveEffectiveHolder(currentInventory, 'inventory', allInvs);
+          const iHoldFolder = currentInventory.currentHolder && currentInventory.currentHolder === user?.email;
+          return (
+            <AppSection title="Self-Custody & QR Tag" style={{ marginTop: 18 }}>
+              <div className="row-between">
+                <div className="grow">
+                  <div className="detail-label">Held by</div>
+                  <div className="t-body" style={{ fontWeight: 600, marginTop: 2 }}>
+                    {effectiveHolder.holder ? holderNameFor(effectiveHolder.holder) : 'Unassigned'}
+                  </div>
+                  {effectiveHolder.source === 'inherited' && (
+                    <div className="meta-line" style={{ marginTop: 2 }}>
+                      <CornerDownRight size={12} /> via {effectiveHolder.from?.name || 'parent folder'}
+                    </div>
+                  )}
+                </div>
+                {iHoldFolder ? (
+                  <AppButton variant="secondary" size="sm" onClick={handleReleaseFolder} loading={custodyBusy}>
+                    Release
+                  </AppButton>
+                ) : (
+                  <AppButton variant="primary" size="sm" onClick={handleHoldFolder} loading={custodyBusy} icon={<UserCheck size={14} color="#09090B" />}>
+                    Hold this
+                  </AppButton>
+                )}
+              </div>
+              <div className="detail-row" style={{ marginTop: 12 }}>
+                <span className="detail-label">QR Tag</span>
+                <span className="row gap-sm">
+                  <span className="detail-value" style={{ fontFamily: 'monospace' }}>{currentInventory.activeTagId || 'None'}</span>
+                  <AppButton variant="ghost" size="sm" onClick={() => setReplaceVisible(true)}>
+                    {currentInventory.activeTagId ? 'Replace' : 'Attach'}
+                  </AppButton>
+                </span>
+              </div>
+            </AppSection>
+          );
+        })()}
 
         <AppSection title="Assignment & Custody" style={{ marginTop: 18 }}>
           <Row label="Current Holder" value={holderNameFor(currentInventory.currentHolder)} />
@@ -489,12 +589,15 @@ export default function FolderDetailScreen() {
               style={{ flex: 1 }}
               onClick={async () => {
                 if (!newName.trim()) return;
+                const createdName = newName.trim();
+                const entityType = activeTab === 'sub' ? 'inventory' : 'item';
                 try {
+                  let ref;
                   if (activeTab === 'sub') {
-                    await InventoryService.addSubInventory(currentInventory.listId, inventoryId, newName.trim());
+                    ref = await InventoryService.addSubInventory(currentInventory.listId, inventoryId, createdName);
                   } else {
-                    await InventoryService.addItem(inventoryId, {
-                      name: newName.trim(),
+                    ref = await InventoryService.addItem(inventoryId, {
+                      name: createdName,
                       quantity: parseInt(newQty || 1, 10),
                       category: newCategory.trim(),
                     });
@@ -503,6 +606,15 @@ export default function FolderDetailScreen() {
                   setNewName('');
                   setNewQty('1');
                   setNewCategory('');
+                  // Offer to attach a QR tag to the thing we just created.
+                  if (ref?.id) {
+                    alertConfirm({
+                      title: 'Attach a QR tag?',
+                      message: `Link a physical QR label to "${createdName}" now?`,
+                      confirmLabel: 'Scan tag',
+                      onConfirm: () => setAttachTarget({ type: entityType, id: ref.id, name: createdName }),
+                    });
+                  }
                 } catch {
                   toast.error('Could not create the resource. Please try again.');
                 }
@@ -614,6 +726,18 @@ export default function FolderDetailScreen() {
           </AppButton>
           <div className="divider" style={{ margin: '6px 0' }} />
           <AppButton
+            variant="secondary"
+            icon={<QrCode size={18} color="var(--accent)" />}
+            onClick={() => {
+              setIsActionsModalVisible(false);
+              setBulkScanVisible(true);
+            }}
+            style={{ justifyContent: 'flex-start' }}
+          >
+            Bulk scan into this folder
+          </AppButton>
+          <div className="divider" style={{ margin: '6px 0' }} />
+          <AppButton
             variant="danger"
             icon={<Trash2 size={18} color="#EF4444" />}
             onClick={() => {
@@ -631,6 +755,27 @@ export default function FolderDetailScreen() {
           </AppButton>
         </div>
       </AppModal>
+
+      {/* Attach a tag to a just-created sub-folder/item */}
+      <AttachTagModal visible={!!attachTarget} entity={attachTarget} onClose={() => setAttachTarget(null)} />
+
+      {/* Attach / replace THIS folder's own tag */}
+      <AttachTagModal
+        visible={replaceVisible}
+        mode={currentInventory.activeTagId ? 'replace' : 'attach'}
+        entity={{ type: 'inventory', id: inventoryId, name: currentInventory.name }}
+        onClose={() => setReplaceVisible(false)}
+      />
+
+      {bulkScanVisible && (
+        <BulkScanModal
+          visible
+          onClose={() => setBulkScanVisible(false)}
+          containerId={inventoryId}
+          containerName={currentInventory.name || inventoryName}
+          allInvs={allInvs}
+        />
+      )}
     </Screen>
   );
 }

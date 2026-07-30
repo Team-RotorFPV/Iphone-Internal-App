@@ -5,6 +5,8 @@ import { InventoryService } from '../../services/inventory';
 import { UsersService } from '../../services/users';
 import MoveDestinationModal from '../../components/MoveDestinationModal';
 import ExportModal from '../../components/ExportModal';
+import InventoryScanButton from '../../components/InventoryScanButton';
+import AttachTagModal from '../../components/AttachTagModal';
 import {
   AppSearchBar,
   AppListItem,
@@ -17,7 +19,7 @@ import {
   AppEmptyState,
 } from '../../components/ui';
 import Screen from '../../components/Screen';
-import { toast } from '../../lib/toast';
+import { alertConfirm, toast } from '../../lib/toast';
 import {
   getRelativeTime,
   getHolderName,
@@ -56,6 +58,7 @@ export default function InventoryDetailScreen() {
   const [newInventoryName, setNewInventoryName] = useState('');
   const [isMoveModalVisible, setIsMoveModalVisible] = useState(false);
   const [isExportModalVisible, setIsExportModalVisible] = useState(false);
+  const [attachTarget, setAttachTarget] = useState(null);
 
   useEffect(() => {
     const unsubs = [
@@ -77,10 +80,18 @@ export default function InventoryDetailScreen() {
 
   const handleAddInventory = async () => {
     if (!newInventoryName.trim()) return;
+    const createdName = newInventoryName.trim();
     try {
-      await InventoryService.addInventory(listId, newInventoryName.trim());
+      const ref = await InventoryService.addInventory(listId, createdName);
       setIsAddModalVisible(false);
       setNewInventoryName('');
+      // Offer to attach a QR tag to the folder we just created.
+      alertConfirm({
+        title: 'Attach a QR tag?',
+        message: `Link a physical QR label to "${createdName}" now?`,
+        confirmLabel: 'Scan tag',
+        onConfirm: () => setAttachTarget({ type: 'inventory', id: ref.id, name: createdName }),
+      });
     } catch {
       toast.error('Failed to create folder');
     }
@@ -199,6 +210,13 @@ export default function InventoryDetailScreen() {
 
   const headerRight = !searchQuery.trim() ? (
     <>
+      <InventoryScanButton
+        surface="list"
+        variant="compact"
+        containerId={listId}
+        allInvs={allInvs}
+        bindCandidates={topLevelInventories.map((inv) => ({ type: 'inventory', id: inv.id, name: inv.name }))}
+      />
       <AppButton
         variant="secondary"
         size="sm"
@@ -300,6 +318,8 @@ export default function InventoryDetailScreen() {
         onDismiss={() => setIsExportModalVisible(false)}
         listId={listId}
       />
+
+      <AttachTagModal visible={!!attachTarget} entity={attachTarget} onClose={() => setAttachTarget(null)} />
 
       {!isSelectionMode && !searchQuery.trim() && (
         <AppFAB label="New Folder" onClick={() => setIsAddModalVisible(true)} />

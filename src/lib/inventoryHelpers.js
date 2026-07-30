@@ -61,6 +61,32 @@ export const calculateDescendantItemCount = (invId, allInvs = [], allItems = [])
 };
 
 /**
+ * Full human-readable location path for an inventory (folder/sub-folder),
+ * from its list down to the folder itself, e.g. "Main List / Motors / Screws".
+ * Walks the parent chain; cycle-safe. Pass an item's `inventoryId` to get the
+ * path of the folder that contains it.
+ */
+export const buildInventoryPath = (inventoryId, allInvs = [], lists = []) => {
+  const names = [];
+  const seen = new Set();
+  let current = allInvs.find(i => i.id === inventoryId);
+  let listId = current?.listId;
+  let depth = 0;
+
+  while (current && !seen.has(current.id) && depth <= MAX_TREE_DEPTH) {
+    names.unshift(current.name || 'Unnamed');
+    seen.add(current.id);
+    listId = current.listId || listId;
+    if (!current.parentInventoryId) break;
+    current = allInvs.find(i => i.id === current.parentInventoryId);
+    depth++;
+  }
+
+  const listName = lists.find(l => l.id === listId)?.name;
+  return [listName, ...names].filter(Boolean).join(' / ');
+};
+
+/**
  * Map an inventory status onto an AppBadge variant.
  */
 export const getStatusBadgeVariant = (status) => {
