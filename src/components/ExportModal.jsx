@@ -42,10 +42,10 @@ export default function ExportModal({ visible, onDismiss, onClose, listId, inven
   const OptionCard = ({ active, onClick, icon, label, sub }) => (
     <button type="button" className={`opt-card${active ? ' active' : ''}`} onClick={onClick}>
       <div className="opt-head">
-        <div className="opt-iconbox" style={{ background: active ? '#8B5CF620' : 'var(--elevated)' }}>
+        <div className="opt-iconbox" style={{ background: active ? '#268BD220' : 'var(--elevated)' }}>
           {icon}
         </div>
-        {active ? <CheckSquare size={18} color="#8B5CF6" /> : <Square size={18} color="var(--text-muted)" />}
+        {active ? <CheckSquare size={18} color="#268BD2" /> : <Square size={18} color="var(--text-muted)" />}
       </div>
       <div className="opt-label">{label}</div>
       {sub && <div className="opt-sub">{sub}</div>}
@@ -82,7 +82,7 @@ export default function ExportModal({ visible, onDismiss, onClose, listId, inven
               key={s.key}
               active={scope === s.key}
               onClick={() => setScope(s.key)}
-              icon={<Layers size={18} color={scope === s.key ? '#8B5CF6' : 'var(--text-secondary)'} />}
+              icon={<Layers size={18} color={scope === s.key ? '#268BD2' : 'var(--text-secondary)'} />}
               label={s.label}
             />
           ))}
@@ -94,14 +94,14 @@ export default function ExportModal({ visible, onDismiss, onClose, listId, inven
           <OptionCard
             active={format === 'csv'}
             onClick={() => setFormat('csv')}
-            icon={<FileText size={18} color={format === 'csv' ? '#8B5CF6' : 'var(--text-secondary)'} />}
+            icon={<FileText size={18} color={format === 'csv' ? '#268BD2' : 'var(--text-secondary)'} />}
             label="Standard CSV (.csv)"
             sub="Universal comma-separated format for scripts and databases"
           />
           <OptionCard
             active={format === 'excel'}
             onClick={() => setFormat('excel')}
-            icon={<Table size={18} color={format === 'excel' ? '#8B5CF6' : 'var(--text-secondary)'} />}
+            icon={<Table size={18} color={format === 'excel' ? '#268BD2' : 'var(--text-secondary)'} />}
             label="Excel Workbook (.xlsx)"
             sub="A real spreadsheet with a summary block and rows grouped by list"
           />
@@ -111,9 +111,9 @@ export default function ExportModal({ visible, onDismiss, onClose, listId, inven
       {result && (
         <div className={`result-box ${result.type}`}>
           {result.type === 'success' ? (
-            <CheckCircle2 size={18} color="#10B981" />
+            <CheckCircle2 size={18} color="#859900" />
           ) : (
-            <AlertCircle size={18} color="#EF4444" />
+            <AlertCircle size={18} color="#DC322F" />
           )}
           <span>{result.message}</span>
         </div>

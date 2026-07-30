@@ -104,7 +104,7 @@ export default function ManageTagsScreen() {
               <div className="stat-label">Unassigned</div>
             </div>
             <div className="stat-pill">
-              <div className="stat-value" style={{ color: '#10B981' }}>{counts.active}</div>
+              <div className="stat-value" style={{ color: '#859900' }}>{counts.active}</div>
               <div className="stat-label">Active</div>
             </div>
             <div className="stat-pill">
@@ -120,7 +120,7 @@ export default function ManageTagsScreen() {
           Print these before sticking them on anything. Each tag starts unassigned and is bound when first scanned inside a folder.
         </p>
         <AppInput label="How many?" value={countText} onChangeText={setCountText} inputMode="numeric" placeholder="50" />
-        <AppButton variant="primary" onClick={handleMint} loading={minting} icon={<Plus size={16} color="#09090B" />} fullWidth>
+        <AppButton variant="primary" onClick={handleMint} loading={minting} icon={<Plus size={16} color="#002B36" />} fullWidth>
           Generate Tags
         </AppButton>
       </AppSection>

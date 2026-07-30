@@ -168,8 +168,8 @@ export default function ManageSponsorsScreen() {
                   <img src={item.logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                 </div>
               ) : (
-                <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#10B98115' }}>
-                  <DollarSign size={20} color="#10B981" />
+                <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#85990015' }}>
+                  <DollarSign size={20} color="#859900" />
                 </div>
               )
             }
@@ -201,7 +201,7 @@ export default function ManageSponsorsScreen() {
         <div className="row-between" style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: 16, borderRadius: 12, marginTop: 8 }}>
           <div className="grow" style={{ marginRight: 12 }}>
             <div className="row gap-xs">
-              {formData.isActive ? <Eye size={16} color="#10B981" /> : <EyeOff size={16} color="#EF4444" />}
+              {formData.isActive ? <Eye size={16} color="#859900" /> : <EyeOff size={16} color="#DC322F" />}
               <span className="t-body" style={{ fontWeight: 600 }}>Showcase Status</span>
             </div>
             <div className="t-caption">If disabled, logo is hidden from the public website.</div>
@@ -214,7 +214,7 @@ export default function ManageSponsorsScreen() {
             {formData.logo ? <img src={formData.logo} alt="" style={{ objectFit: 'contain', padding: 16 }} /> : (<><ImageIcon size={32} /><span className="t-caption">No partner logo uploaded yet.</span></>)}
           </div>
           {formData.logo && (
-            <div className="meta-line" style={{ color: '#10B981', marginBottom: 12 }}>
+            <div className="meta-line" style={{ color: '#859900', marginBottom: 12 }}>
               <CheckCircle2 size={14} /> Uploaded to Cloud Storage
             </div>
           )}
@@ -244,7 +244,7 @@ export default function ManageSponsorsScreen() {
             {pageSettings.teamImage?.url ? <img src={pageSettings.teamImage.url} alt="" /> : (<><ImageIcon size={32} /><span className="t-caption">No hero team photograph uploaded.</span></>)}
           </div>
           {pageSettings.teamImage?.url && (
-            <div className="meta-line" style={{ color: '#10B981', marginBottom: 12 }}>
+            <div className="meta-line" style={{ color: '#859900', marginBottom: 12 }}>
               <CheckCircle2 size={14} /> Team Image Active
             </div>
           )}
@@ -255,8 +255,8 @@ export default function ManageSponsorsScreen() {
 
         <AppSection title="Sponsorship Prospectus Brochure (.pdf)" style={{ marginTop: 18 }}>
           <div className="row gap-md" style={{ marginBottom: 14 }}>
-            <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#38BDF815' }}>
-              <FileText size={20} color="#38BDF8" />
+            <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#2AA19815' }}>
+              <FileText size={20} color="#2AA198" />
             </div>
             <div className="grow">
               <div className="t-body" style={{ fontWeight: 600 }}>

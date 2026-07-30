@@ -224,10 +224,10 @@ export default function ManageTeamMembersScreen() {
             <>
               <AppBadge variant="danger">ARCHIVED</AppBadge>
               <button type="button" className="icon-well" style={{ width: 32, height: 32, background: 'var(--elevated)' }} onClick={() => handleRestoreUser(item.email)}>
-                <RotateCcw size={16} color="#10B981" />
+                <RotateCcw size={16} color="#859900" />
               </button>
-              <button type="button" className="icon-well" style={{ width: 32, height: 32, background: '#EF444415', borderColor: '#EF444430' }} onClick={() => handleDeleteUser(item.email)}>
-                <Trash2 size={16} color="#EF4444" />
+              <button type="button" className="icon-well" style={{ width: 32, height: 32, background: '#DC322F15', borderColor: '#DC322F30' }} onClick={() => handleDeleteUser(item.email)}>
+                <Trash2 size={16} color="#DC322F" />
               </button>
             </>
           ) : (
@@ -278,18 +278,18 @@ export default function ManageTeamMembersScreen() {
       ) : (
         <>
           {joinRequests.length > 0 && (
-            <div style={{ marginBottom: 20, background: 'rgba(25,24,37,0.4)', padding: 16, borderRadius: 20, border: '1px solid #F59E0B40' }}>
+            <div style={{ marginBottom: 20, background: 'rgba(25,24,37,0.4)', padding: 16, borderRadius: 20, border: '1px solid #B5890040' }}>
               <div className="row gap-md" style={{ marginBottom: 14 }}>
-                <div className="icon-well" style={{ width: 40, height: 40, borderRadius: 12, background: '#F59E0B15' }}>
-                  <AlertTriangle size={18} color="#F59E0B" />
+                <div className="icon-well" style={{ width: 40, height: 40, borderRadius: 12, background: '#B5890015' }}>
+                  <AlertTriangle size={18} color="#B58900" />
                 </div>
                 <div className="grow">
-                  <div className="t-body" style={{ fontWeight: 600, color: '#F59E0B' }}>Pending Join Applications ({joinRequests.length})</div>
+                  <div className="t-body" style={{ fontWeight: 600, color: '#B58900' }}>Pending Join Applications ({joinRequests.length})</div>
                   <div className="t-caption">Review applicants wishing to join the team</div>
                 </div>
               </div>
               {joinRequests.map((req) => (
-                <AppCard key={req.id} variant="elevated" style={{ border: '1px solid #F59E0B30' }}>
+                <AppCard key={req.id} variant="elevated" style={{ border: '1px solid #B5890030' }}>
                   <div className="row-between" style={{ alignItems: 'flex-start', marginBottom: 10 }}>
                     <div className="grow">
                       <div className="t-body" style={{ fontWeight: 600 }}>{req.name || 'Anonymous Applicant'}</div>
@@ -308,7 +308,7 @@ export default function ManageTeamMembersScreen() {
                     </div>
                   )}
                   <div className="row gap-sm">
-                    <AppButton variant="ghost" size="sm" onClick={() => handleRejectRequest(req.id)} style={{ flex: 1 }} icon={<UserX size={14} color="#EF4444" />}>Reject</AppButton>
+                    <AppButton variant="ghost" size="sm" onClick={() => handleRejectRequest(req.id)} style={{ flex: 1 }} icon={<UserX size={14} color="#DC322F" />}>Reject</AppButton>
                     <AppButton variant="primary" size="sm" onClick={() => handleApproveRequest(req)} style={{ flex: 1 }} icon={<UserCheck size={14} color="var(--bg)" />}>Approve</AppButton>
                   </div>
                 </AppCard>
@@ -375,7 +375,7 @@ export default function ManageTeamMembersScreen() {
                   style={isSelected ? { background: 'var(--accent-muted)', borderColor: 'var(--accent)' } : undefined}
                   onClick={() => toggleTag(tag.id)}
                 >
-                  {isSelected ? <CheckSquare size={16} color="#8B5CF6" /> : <Square size={16} color="var(--text-muted)" />}
+                  {isSelected ? <CheckSquare size={16} color="#268BD2" /> : <Square size={16} color="var(--text-muted)" />}
                   <span style={{ color: isSelected ? '#fff' : 'var(--text-primary)' }}>{tag.name}</span>
                 </button>
               );

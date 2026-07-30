@@ -110,8 +110,8 @@ export default function ManageEventsScreen() {
                 item.image ? (
                   <img className="thumb" src={item.image} alt="" style={{ width: 44, height: 44 }} />
                 ) : (
-                  <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#38BDF815' }}>
-                    <Calendar size={18} color="#38BDF8" />
+                  <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#2AA19815' }}>
+                    <Calendar size={18} color="#2AA198" />
                   </div>
                 )
               }
@@ -149,7 +149,7 @@ export default function ManageEventsScreen() {
         <div className="row-between" style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: 16, borderRadius: 12, marginTop: 8 }}>
           <div className="grow" style={{ marginRight: 12 }}>
             <div className="row gap-xs">
-              {formData.isActive ? <Eye size={16} color="#10B981" /> : <EyeOff size={16} color="#EF4444" />}
+              {formData.isActive ? <Eye size={16} color="#859900" /> : <EyeOff size={16} color="#DC322F" />}
               <span className="t-body" style={{ fontWeight: 600 }}>Publicly Visible</span>
             </div>
             <div className="t-caption">When disabled, this event is hidden from the public website.</div>
@@ -162,7 +162,7 @@ export default function ManageEventsScreen() {
             {formData.image ? <img src={formData.image} alt="" /> : (<><ImageIcon size={32} /><span className="t-caption">No cover image uploaded yet.</span></>)}
           </div>
           {formData.image && (
-            <div className="meta-line" style={{ color: '#10B981', marginBottom: 12 }}>
+            <div className="meta-line" style={{ color: '#859900', marginBottom: 12 }}>
               <CheckCircle2 size={14} /> Uploaded to Cloud Storage
             </div>
           )}

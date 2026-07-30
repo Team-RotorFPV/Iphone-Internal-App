@@ -95,9 +95,9 @@ export default function ManageTeamScreen() {
 
   const getCategoryIcon = (category) => {
     const cat = (category || '').toLowerCase();
-    if (cat === 'leaders') return <Award size={18} color="#A855F7" />;
-    if (cat === 'technical') return <Wrench size={18} color="#38BDF8" />;
-    return <Briefcase size={18} color="#10B981" />;
+    if (cat === 'leaders') return <Award size={18} color="#D33682" />;
+    if (cat === 'technical') return <Wrench size={18} color="#2AA198" />;
+    return <Briefcase size={18} color="#859900" />;
   };
 
   const getCategoryBadgeVariant = (category) => {
@@ -138,7 +138,7 @@ export default function ManageTeamScreen() {
               title={getUserDetails(item.userId)}
               description={`${item.role || 'Team Member'} • Order #${item.order}`}
               leftIcon={
-                <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: item.category === 'leaders' ? '#A855F715' : '#38BDF815' }}>
+                <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: item.category === 'leaders' ? '#D3368215' : '#2AA19815' }}>
                   {getCategoryIcon(item.category)}
                 </div>
               }
@@ -181,7 +181,7 @@ export default function ManageTeamScreen() {
         <div className="row-between" style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: 16, borderRadius: 12, marginTop: 8 }}>
           <div className="grow" style={{ marginRight: 12 }}>
             <div className="row gap-xs">
-              {formData.isActive ? <Eye size={16} color="#10B981" /> : <EyeOff size={16} color="#EF4444" />}
+              {formData.isActive ? <Eye size={16} color="#859900" /> : <EyeOff size={16} color="#DC322F" />}
               <span className="t-body" style={{ fontWeight: 600 }}>Active Roster Status</span>
             </div>
             <div className="t-caption">When disabled, this member is hidden from the public team page.</div>

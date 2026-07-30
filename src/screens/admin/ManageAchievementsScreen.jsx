@@ -115,7 +115,7 @@ export default function ManageAchievementsScreen() {
                   <img className="thumb" src={item.images[0]} alt="" style={{ width: 44, height: 44 }} />
                 ) : (
                   <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--accent-muted)' }}>
-                    <Trophy size={20} color="#8B5CF6" />
+                    <Trophy size={20} color="#268BD2" />
                   </div>
                 )
               }
@@ -154,7 +154,7 @@ export default function ManageAchievementsScreen() {
             {formData.images?.length ? <img src={formData.images[0]} alt="" /> : (<><Award size={32} /><span className="t-caption">No award photo uploaded yet.</span></>)}
           </div>
           {formData.images?.length > 0 && (
-            <div className="meta-line" style={{ color: '#10B981', marginBottom: 12 }}>
+            <div className="meta-line" style={{ color: '#859900', marginBottom: 12 }}>
               <CheckCircle2 size={14} /> Uploaded to Cloud Storage
             </div>
           )}

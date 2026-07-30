@@ -164,7 +164,7 @@ export default function ItemDetailScreen() {
       <div className="row-between" style={{ alignItems: 'flex-start', marginBottom: 8 }}>
         <div className="grow" style={{ marginRight: 12 }}>
           <div className="row gap-sm" style={{ marginBottom: 6 }}>
-            <Box size={18} color="#A855F7" />
+            <Box size={18} color="#D33682" />
             <AppBadge variant={item.quantity > 0 ? 'success' : 'danger'}>
               {item.quantity > 0 ? 'In Stock' : 'Depleted'}
             </AppBadge>
@@ -176,7 +176,7 @@ export default function ItemDetailScreen() {
         {!isEditing && (
           <div className="row gap-sm">
             <AppButton variant="secondary" size="sm" icon={<Edit2 size={14} />} onClick={handleEditToggle} />
-            <AppButton variant="danger" size="sm" icon={<Trash2 size={14} color="#EF4444" />} onClick={handleDelete} />
+            <AppButton variant="danger" size="sm" icon={<Trash2 size={14} color="#DC322F" />} onClick={handleDelete} />
           </div>
         )}
       </div>
@@ -207,7 +207,7 @@ export default function ItemDetailScreen() {
             <AppButton variant="ghost" onClick={handleEditToggle} style={{ flex: 1 }} disabled={saving}>
               Cancel
             </AppButton>
-            <AppButton variant="primary" onClick={handleSave} style={{ flex: 1 }} loading={saving} icon={<Check size={16} color="#09090B" />}>
+            <AppButton variant="primary" onClick={handleSave} style={{ flex: 1 }} loading={saving} icon={<Check size={16} color="#002B36" />}>
               Save Changes
             </AppButton>
           </div>
@@ -216,15 +216,15 @@ export default function ItemDetailScreen() {
         <>
           <div className="stat-row" style={{ marginTop: 16 }}>
             <AppCard variant="elevated" className="stat-pill" flush style={{ textAlign: 'left' }}>
-              <div className="icon-well" style={{ width: 36, height: 36, background: '#38BDF815', marginBottom: 12 }}>
-                <Hash size={18} color="#38BDF8" />
+              <div className="icon-well" style={{ width: 36, height: 36, background: '#2AA19815', marginBottom: 12 }}>
+                <Hash size={18} color="#2AA198" />
               </div>
               <div className="stat-label" style={{ textAlign: 'left' }}>Current Stock</div>
               <div className="stat-value" style={{ fontSize: 28, textAlign: 'left' }}>{item.quantity || 0}</div>
             </AppCard>
             <AppCard variant="elevated" className="stat-pill" flush style={{ textAlign: 'left' }}>
-              <div className="icon-well" style={{ width: 36, height: 36, background: '#A855F715', marginBottom: 12 }}>
-                <Tag size={18} color="#A855F7" />
+              <div className="icon-well" style={{ width: 36, height: 36, background: '#D3368215', marginBottom: 12 }}>
+                <Tag size={18} color="#D33682" />
               </div>
               <div className="stat-label" style={{ textAlign: 'left' }}>Category</div>
               <div className="stat-value" style={{ fontSize: 20, textAlign: 'left' }}>{item.category || 'General'}</div>
@@ -249,7 +249,7 @@ export default function ItemDetailScreen() {
                   Release
                 </AppButton>
               ) : (
-                <AppButton variant="primary" size="sm" onClick={handleHold} loading={custodyBusy} icon={<UserCheck size={14} color="#09090B" />}>
+                <AppButton variant="primary" size="sm" onClick={handleHold} loading={custodyBusy} icon={<UserCheck size={14} color="#002B36" />}>
                   Hold this
                 </AppButton>
               )}

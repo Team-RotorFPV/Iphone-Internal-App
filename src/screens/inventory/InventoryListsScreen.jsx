@@ -275,15 +275,15 @@ export default function InventoryListsScreen() {
         subtitle = 'Inventory List';
         onPress = () => goList(item);
       } else if (item._type === 'folder') {
-        icon = <Folder size={18} color="#38BDF8" />;
+        icon = <Folder size={18} color="#2AA198" />;
         subtitle = `Folder • In ${lists.find((l) => l.id === item.listId)?.name || 'Unknown List'}`;
         onPress = () => goFolder(item);
       } else if (item._type === 'item') {
-        icon = <Box size={18} color="#A855F7" />;
+        icon = <Box size={18} color="#D33682" />;
         subtitle = `Item • Qty: ${item.quantity || 0}`;
         onPress = () => goItem(item);
       } else if (item._type === 'user') {
-        icon = <User size={18} color="#10B981" />;
+        icon = <User size={18} color="#859900" />;
         const heldInvs = allInvs.filter(
           (inv) =>
             inv.currentHolder?.toLowerCase() === item.email?.toLowerCase() ||

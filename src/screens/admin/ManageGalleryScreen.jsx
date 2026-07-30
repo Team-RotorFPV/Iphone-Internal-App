@@ -127,7 +127,7 @@ export default function ManageGalleryScreen() {
       </AppCard>
 
       <div className="row gap-sm" style={{ marginBottom: 12 }}>
-        <LayoutGrid size={18} color="#38BDF8" />
+        <LayoutGrid size={18} color="#2AA198" />
         <span className="section-title" style={{ fontSize: 20 }}>Gallery Grid ({items.length})</span>
       </div>
 
@@ -157,7 +157,7 @@ export default function ManageGalleryScreen() {
                     <Edit2 size={14} color="#fff" />
                   </span>
                   <span role="button" tabIndex={0} className="ov-btn danger" onClick={(e) => { e.stopPropagation(); handleDelete(item); }}>
-                    <Trash2 size={14} color="#EF4444" />
+                    <Trash2 size={14} color="#DC322F" />
                   </span>
                 </span>
               </div>
@@ -186,7 +186,7 @@ export default function ManageGalleryScreen() {
             {formData.img ? <img src={formData.img} alt="" /> : (<><ImageIcon size={32} /><span className="t-caption">No image selected yet.</span></>)}
           </div>
           {formData.img && (
-            <div className="meta-line" style={{ color: '#10B981', marginBottom: 12 }}>
+            <div className="meta-line" style={{ color: '#859900', marginBottom: 12 }}>
               <CheckCircle2 size={14} /> Uploaded ({formData.originalWidth}x{formData.originalHeight})
             </div>
           )}

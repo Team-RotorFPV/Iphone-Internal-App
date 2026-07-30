@@ -21,7 +21,7 @@
   cursor: pointer;
 }
 .node-row.selected {
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(38, 139, 210, 0.15);
 }
 .node-row.disabled {
   opacity: 0.45;
@@ -48,8 +48,8 @@
   flex-shrink: 0;
 }
 .type-iconbox.sel {
-  background: #8b5cf620;
-  border-color: #8b5cf640;
+  background: #268BD220;
+  border-color: #268BD240;
 }
 .node-name {
   display: block;
@@ -57,7 +57,7 @@
   color: var(--text-primary);
 }
 .node-name.sel {
-  color: #fff;
+  color: var(--text-primary);
   font-weight: 600;
 }
 .node-sub {
@@ -80,11 +80,11 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #ef444415;
+  background: #DC322F15;
   padding: 2px 6px;
   border-radius: var(--r-sm);
-  border: 1px solid #ef444430;
-  color: #ef4444;
+  border: 1px solid #DC322F30;
+  color: #DC322F;
   font-size: 10px;
   font-weight: 700;
   flex-shrink: 0;

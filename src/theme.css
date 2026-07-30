@@ -1,25 +1,25 @@
 /* Design tokens ported from App/src/theme.js */
 :root {
-  /* Colors */
-  --bg: #0b0a10;
-  --surface: #12111a;
-  --elevated: #191825;
-  --border: #2a293d;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent: #8b5cf6;
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --success: #22c55e;
-  --info: #38bdf8;
+  /* Colors — Solarized Dark (matches App/src/theme.js) */
+  --bg: #002b36;
+  --surface: #073642;
+  --elevated: #0a4351;
+  --border: #586e75;
+  --text-primary: #93a1a1;
+  --text-secondary: #839496;
+  --text-muted: #657b83;
+  --accent: #268bd2;
+  --danger: #dc322f;
+  --warning: #b58900;
+  --success: #859900;
+  --info: #2aa198;
 
-  --accent-muted: rgba(139, 92, 246, 0.15);
-  --danger-muted: rgba(239, 68, 68, 0.15);
-  --warning-muted: rgba(245, 158, 11, 0.15);
-  --success-muted: rgba(34, 197, 94, 0.15);
-  --surface-highlight: rgba(255, 255, 255, 0.05);
-  --backdrop: rgba(0, 0, 0, 0.75);
+  --accent-muted: rgba(38, 139, 210, 0.15);
+  --danger-muted: rgba(220, 50, 47, 0.15);
+  --warning-muted: rgba(181, 137, 0, 0.15);
+  --success-muted: rgba(133, 153, 0, 0.15);
+  --surface-highlight: rgba(147, 161, 161, 0.05);
+  --backdrop: rgba(0, 43, 54, 0.75);
 
   /* Spacing */
   --sp-xs: 4px;
