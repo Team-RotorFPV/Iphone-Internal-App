@@ -46,7 +46,7 @@ export default function ManageGalleryScreen() {
   };
 
   const handleDelete = (item) =>
-    alertConfirm({ title: 'Confirm Delete', message: 'Permanently delete this gallery image?', onConfirm: () => GalleryService.deleteGalleryItem(item) });
+    alertConfirm({ title: 'Confirm Delete', message: 'Are you sure you want to permanently delete this gallery image?', onConfirm: () => GalleryService.deleteGalleryItem(item) });
 
   const handlePickImage = async () => {
     setIsSaving(true);
@@ -127,7 +127,7 @@ export default function ManageGalleryScreen() {
       </AppCard>
 
       <div className="row gap-sm" style={{ marginBottom: 12 }}>
-        <LayoutGrid size={18} color="#2AA198" />
+        <LayoutGrid size={18} color="#FF9800" />
         <span className="section-title" style={{ fontSize: 20 }}>Gallery Grid ({items.length})</span>
       </div>
 
@@ -157,7 +157,7 @@ export default function ManageGalleryScreen() {
                     <Edit2 size={14} color="#fff" />
                   </span>
                   <span role="button" tabIndex={0} className="ov-btn danger" onClick={(e) => { e.stopPropagation(); handleDelete(item); }}>
-                    <Trash2 size={14} color="#DC322F" />
+                    <Trash2 size={14} color="#F44336" />
                   </span>
                 </span>
               </div>
@@ -186,7 +186,7 @@ export default function ManageGalleryScreen() {
             {formData.img ? <img src={formData.img} alt="" /> : (<><ImageIcon size={32} /><span className="t-caption">No image selected yet.</span></>)}
           </div>
           {formData.img && (
-            <div className="meta-line" style={{ color: '#859900', marginBottom: 12 }}>
+            <div className="meta-line" style={{ color: '#66BB6A', marginBottom: 12 }}>
               <CheckCircle2 size={14} /> Uploaded ({formData.originalWidth}x{formData.originalHeight})
             </div>
           )}

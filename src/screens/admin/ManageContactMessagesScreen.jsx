@@ -22,7 +22,7 @@ export default function ManageContactMessagesScreen() {
 
   const handleToggleStatus = (msg) => {
     const newStatus = msg.status === 'unread' ? 'read' : 'unread';
-    MessagesService.updateMessageStatus(msg.id, newStatus).catch(() => toast.error('Failed to update read status.'));
+    MessagesService.updateMessageStatus(msg.id, newStatus).catch(() => toast.error('Failed to update message read status in cloud storage.'));
   };
 
   const handleDelete = (msg) => {
@@ -69,18 +69,18 @@ export default function ManageContactMessagesScreen() {
       ) : filteredMessages.length === 0 ? (
         <AppEmptyState
           title={`No ${filter === 'all' ? '' : filter} inquiries found`}
-          description={searchQuery ? 'No contact messages matched your search query.' : 'When sponsors, students, or partners contact the team through the website, messages appear here.'}
+          description={searchQuery ? 'No contact messages matched your search query.' : 'When prospective sponsors, students, or partners contact the team through the website, messages appear here.'}
         />
       ) : (
         filteredMessages.map((item) => {
           const isUnread = item.status === 'unread';
           const formattedDate = item.createdAt?.toLocaleString ? item.createdAt.toLocaleString() : 'Recent';
           return (
-            <AppCard key={item.id} variant={isUnread ? 'elevated' : 'surface'} style={isUnread ? { borderColor: 'rgba(38, 139, 210,0.5)' } : undefined}>
+            <AppCard key={item.id} variant={isUnread ? 'elevated' : 'surface'} style={isUnread ? { borderColor: 'rgba(255, 152, 0,0.5)' } : undefined}>
               <div className="row-between" style={{ alignItems: 'flex-start', marginBottom: 14 }}>
                 <div className="row gap-md grow" style={{ marginRight: 12 }}>
-                  <div className="icon-well" style={{ width: 40, height: 40, borderRadius: 12, background: isUnread ? '#268BD220' : '#D3368215' }}>
-                    {isUnread ? <Mail size={18} color="#268BD2" /> : <MailOpen size={18} color="#D33682" />}
+                  <div className="icon-well" style={{ width: 40, height: 40, borderRadius: 12, background: isUnread ? '#FF980020' : '#A855F715' }}>
+                    {isUnread ? <Mail size={18} color="#FF9800" /> : <MailOpen size={18} color="#A855F7" />}
                   </div>
                   <div className="grow">
                     <div className="t-body" style={{ fontWeight: 600 }}>{item.name || 'Anonymous Inquiry'}</div>
@@ -88,7 +88,7 @@ export default function ManageContactMessagesScreen() {
                   </div>
                 </div>
                 <div className="stack gap-xs" style={{ alignItems: 'flex-end' }}>
-                  <AppBadge variant={isUnread ? 'primary' : 'secondary'}>{isUnread ? 'NEW' : 'READ'}</AppBadge>
+                  <AppBadge variant={isUnread ? 'primary' : 'secondary'}>{isUnread ? 'NEW INQUIRY' : 'READ'}</AppBadge>
                   <span className="meta-line">
                     <Clock size={12} /> {formattedDate}
                   </span>
@@ -97,7 +97,7 @@ export default function ManageContactMessagesScreen() {
 
               <div className="wrap gap-sm" style={{ marginBottom: 14 }}>
                 {item.queryType && (
-                  <span className="badge" style={{ background: '#2AA19815', color: '#2AA198', borderColor: '#2AA19830' }}>
+                  <span className="badge" style={{ background: '#FF980015', color: '#FF9800', borderColor: '#FF980030' }}>
                     <MessageSquare size={12} style={{ marginRight: 6 }} /> {item.queryType.toUpperCase()}
                   </span>
                 )}
@@ -124,12 +124,12 @@ export default function ManageContactMessagesScreen() {
                   onClick={() => handleToggleStatus(item)}
                   icon={isUnread ? <CheckCircle size={14} /> : <AlertCircle size={14} />}
                 >
-                  {isUnread ? 'Mark Read' : 'Unread'}
+                  {isUnread ? 'Mark as Read' : 'Mark as Unread'}
                 </AppButton>
                 <AppButton variant="primary" size="sm" onClick={() => handleReply(item)} style={{ flex: 1 }} icon={<Reply size={14} color="var(--bg)" />}>
                   Reply via Email
                 </AppButton>
-                <AppButton variant="danger" size="sm" onClick={() => handleDelete(item)} icon={<Trash2 size={16} color="#DC322F" />} />
+                <AppButton variant="danger" size="sm" onClick={() => handleDelete(item)} icon={<Trash2 size={16} color="#F44336" />} />
               </div>
             </AppCard>
           );

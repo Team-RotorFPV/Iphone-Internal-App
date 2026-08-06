@@ -1,25 +1,24 @@
-/* Design tokens ported from App/src/theme.js */
+/* Design tokens ported 1:1 from App/src/theme.js (native React Native app). */
 :root {
-  /* Colors — Solarized Dark (matches App/src/theme.js) */
-  --bg: #002b36;
-  --surface: #073642;
-  --elevated: #0a4351;
-  --border: #586e75;
-  --text-primary: #93a1a1;
-  --text-secondary: #839496;
-  --text-muted: #657b83;
-  --accent: #268bd2;
-  --danger: #dc322f;
-  --warning: #b58900;
-  --success: #859900;
-  --info: #2aa198;
+  /* Colors — Graphite Amber (neutral graphite surfaces + amber cockpit-HUD accent) */
+  --bg: #121212;
+  --surface: #1E1E1E;
+  --elevated: #2A2A2A;
+  --border: #3A3A3A;
+  --text-primary: #EDEDED;
+  --text-secondary: #A8A8A8;
+  --text-muted: #757575;
+  --accent: #FF9800;
+  --danger: #F44336;
+  --warning: #FFC107;
+  --success: #66BB6A;
 
-  --accent-muted: rgba(38, 139, 210, 0.15);
-  --danger-muted: rgba(220, 50, 47, 0.15);
-  --warning-muted: rgba(181, 137, 0, 0.15);
-  --success-muted: rgba(133, 153, 0, 0.15);
-  --surface-highlight: rgba(147, 161, 161, 0.05);
-  --backdrop: rgba(0, 43, 54, 0.75);
+  --accent-muted: rgba(255, 152, 0, 0.15);
+  --danger-muted: rgba(244, 67, 54, 0.15);
+  --warning-muted: rgba(255, 193, 7, 0.15);
+  --success-muted: rgba(102, 187, 106, 0.15);
+  --surface-highlight: rgba(237, 237, 237, 0.05);
+  --backdrop: rgba(18, 18, 18, 0.75);
 
   /* Spacing */
   --sp-xs: 4px;

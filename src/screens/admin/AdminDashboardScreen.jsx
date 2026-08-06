@@ -18,14 +18,14 @@ import Screen from '../../components/Screen';
 import '../screens.css';
 
 const adminModules = [
-  { title: 'Gallery', path: '/admin/gallery', icon: Images, permission: 'media', color: '#2AA198', desc: 'Photos & videos' },
-  { title: 'Sponsors', path: '/admin/sponsors', icon: Award, permission: 'board', color: '#D33682', desc: 'Partners & tiers' },
+  { title: 'Gallery', path: '/admin/gallery', icon: Images, permission: 'media', color: '#FF9800', desc: 'Photos & videos' },
+  { title: 'Sponsors', path: '/admin/sponsors', icon: Award, permission: 'board', color: '#A855F7', desc: 'Partners & tiers' },
   { title: 'Home Page', path: '/admin/home', icon: Layout, permission: 'admin', color: '#3B82F6', desc: 'Hero & announcements' },
-  { title: 'Achievements', path: '/admin/achievements', icon: Trophy, permission: 'board', color: '#B58900', desc: 'Awards & milestones' },
+  { title: 'Achievements', path: '/admin/achievements', icon: Trophy, permission: 'board', color: '#FFC107', desc: 'Awards & milestones' },
   { title: 'Board', path: '/admin/board', icon: Users, permission: 'board', color: '#EC4899', desc: 'Leadership structure' },
-  { title: 'Events', path: '/admin/events', icon: Calendar, permission: 'board', color: '#859900', desc: 'Schedule & RSVP' },
+  { title: 'Events', path: '/admin/events', icon: Calendar, permission: 'board', color: '#66BB6A', desc: 'Schedule & RSVP' },
   { title: 'Messages', path: '/admin/messages', icon: MessageSquare, permission: 'board', color: '#6366F1', desc: 'Inquiries & inbox' },
-  { title: 'Team Members', path: '/admin/team-members', icon: UserCog, permission: 'superAdmin', color: '#268BD2', desc: 'Roster & permissions' },
+  { title: 'Team Members', path: '/admin/team-members', icon: UserCog, permission: 'superAdmin', color: '#FF9800', desc: 'Roster & permissions' },
   { title: 'Socials', path: '/admin/socials', icon: Share2, permission: 'board', color: '#F472B6', desc: 'Footer & link tree' },
   { title: 'QR Tags', path: '/admin/tags', icon: QrCode, permission: 'inventory', color: '#14B8A6', desc: 'Generate & print tags' },
 ];

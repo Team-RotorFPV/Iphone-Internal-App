@@ -63,7 +63,7 @@ export default function ManageSponsorsScreen() {
 
   const handlePickImage = async () => {
     if (!formData.name) {
-      toast.error('Please enter a sponsor name first.');
+      toast.error('Please enter a sponsor name first to create a dedicated cloud folder.');
       return;
     }
     setIsSaving(true);
@@ -79,7 +79,7 @@ export default function ManageSponsorsScreen() {
 
   const handleSave = async () => {
     if (!formData.name || !formData.logo) {
-      toast.error('Sponsor Name and Logo are required.');
+      toast.error('Sponsor Name and Logo are required to display on the website.');
       return;
     }
     setIsSaving(true);
@@ -104,7 +104,7 @@ export default function ManageSponsorsScreen() {
     try {
       await SponsorsService.updateSponsorSettings(pageSettings, user?.email);
       setSettingsModalVisible(false);
-      toast.success('Sponsor page updated successfully');
+      toast.success('Sponsor page narrative and brochure updated successfully');
     } catch {
       toast.error('Failed to save sponsor page settings');
     } finally {
@@ -168,8 +168,8 @@ export default function ManageSponsorsScreen() {
                   <img src={item.logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                 </div>
               ) : (
-                <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#85990015' }}>
-                  <DollarSign size={20} color="#859900" />
+                <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#66BB6A15' }}>
+                  <DollarSign size={20} color="#66BB6A" />
                 </div>
               )
             }
@@ -194,14 +194,14 @@ export default function ManageSponsorsScreen() {
           </div>
         }
       >
-        <AppInput label="Company / Partner Name" value={formData.name} onChangeText={(t) => setFormData({ ...formData, name: t })} placeholder="e.g. Altium, BetaFPV" />
+        <AppInput label="Company / Partner Name" value={formData.name} onChangeText={(t) => setFormData({ ...formData, name: t })} placeholder="e.g. Altium, SolidWorks, BetaFPV" />
         <AppInput label="Website URL" value={formData.website} onChangeText={(t) => setFormData({ ...formData, website: t })} placeholder="https://www.sponsor.com" autoCapitalize="none" inputMode="url" />
         <AppInput label="Display Priority Order" value={String(formData.order)} onChangeText={(t) => setFormData({ ...formData, order: t })} inputMode="numeric" placeholder="0" />
 
         <div className="row-between" style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: 16, borderRadius: 12, marginTop: 8 }}>
           <div className="grow" style={{ marginRight: 12 }}>
             <div className="row gap-xs">
-              {formData.isActive ? <Eye size={16} color="#859900" /> : <EyeOff size={16} color="#DC322F" />}
+              {formData.isActive ? <Eye size={16} color="#66BB6A" /> : <EyeOff size={16} color="#F44336" />}
               <span className="t-body" style={{ fontWeight: 600 }}>Showcase Status</span>
             </div>
             <div className="t-caption">If disabled, logo is hidden from the public website.</div>
@@ -214,7 +214,7 @@ export default function ManageSponsorsScreen() {
             {formData.logo ? <img src={formData.logo} alt="" style={{ objectFit: 'contain', padding: 16 }} /> : (<><ImageIcon size={32} /><span className="t-caption">No partner logo uploaded yet.</span></>)}
           </div>
           {formData.logo && (
-            <div className="meta-line" style={{ color: '#859900', marginBottom: 12 }}>
+            <div className="meta-line" style={{ color: '#66BB6A', marginBottom: 12 }}>
               <CheckCircle2 size={14} /> Uploaded to Cloud Storage
             </div>
           )}
@@ -236,15 +236,15 @@ export default function ManageSponsorsScreen() {
           </div>
         }
       >
-        <AppInput label="Page Intro & Description" value={pageSettings.description} onChangeText={(t) => setPageSettings({ ...pageSettings, description: t })} placeholder="Tell prospective sponsors..." multiline numberOfLines={4} />
-        <AppInput label="Why Sponsor Us (Value Proposition)" value={pageSettings.whySponsorUs} onChangeText={(t) => setPageSettings({ ...pageSettings, whySponsorUs: t })} placeholder="Detail the recruitment access, branding..." multiline numberOfLines={5} />
+        <AppInput label="Page Intro & Description" value={pageSettings.description} onChangeText={(t) => setPageSettings({ ...pageSettings, description: t })} placeholder="Tell prospective sponsors why supporting Team Rotor FPV accelerates aerospace engineering..." multiline numberOfLines={4} />
+        <AppInput label="Why Sponsor Us (Value Proposition)" value={pageSettings.whySponsorUs} onChangeText={(t) => setPageSettings({ ...pageSettings, whySponsorUs: t })} placeholder="Detail the recruitment access, branding on competition drones, and media reach..." multiline numberOfLines={5} />
 
         <AppSection title="Team Showcase Photograph" style={{ marginTop: 18 }}>
           <div className="upload-tile" style={{ marginBottom: 12 }}>
             {pageSettings.teamImage?.url ? <img src={pageSettings.teamImage.url} alt="" /> : (<><ImageIcon size={32} /><span className="t-caption">No hero team photograph uploaded.</span></>)}
           </div>
           {pageSettings.teamImage?.url && (
-            <div className="meta-line" style={{ color: '#859900', marginBottom: 12 }}>
+            <div className="meta-line" style={{ color: '#66BB6A', marginBottom: 12 }}>
               <CheckCircle2 size={14} /> Team Image Active
             </div>
           )}
@@ -253,10 +253,10 @@ export default function ManageSponsorsScreen() {
           </AppButton>
         </AppSection>
 
-        <AppSection title="Sponsorship Prospectus Brochure (.pdf)" style={{ marginTop: 18 }}>
+        <AppSection title="Sponsorship Prospectus Brochure (.pdf / doc)" style={{ marginTop: 18 }}>
           <div className="row gap-md" style={{ marginBottom: 14 }}>
-            <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#2AA19815' }}>
-              <FileText size={20} color="#2AA198" />
+            <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#FF980015' }}>
+              <FileText size={20} color="#FF9800" />
             </div>
             <div className="grow">
               <div className="t-body" style={{ fontWeight: 600 }}>

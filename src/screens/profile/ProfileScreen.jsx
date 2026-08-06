@@ -291,7 +291,7 @@ export default function ProfileScreen() {
                   justifyContent: 'center',
                 }}
               >
-                <Camera size={13} color="#002B36" />
+                <Camera size={13} color="#121212" />
               </button>
             )}
           </div>

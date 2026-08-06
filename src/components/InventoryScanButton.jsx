@@ -166,7 +166,7 @@ export default function InventoryScanButton({
     if (variant === 'fab') {
       return (
         <button type="button" className="fab fab-icon-only" onClick={() => setScannerVisible(true)} aria-label="Scan">
-          <QrCode size={22} color="#002B36" />
+          <QrCode size={22} color="#121212" />
         </button>
       );
     }
@@ -204,7 +204,7 @@ export default function InventoryScanButton({
                 description={item.type === 'item' ? 'Item' : 'Sub-folder'}
                 leftIcon={
                   <div className="icon-well" style={{ width: 34, height: 34, background: 'var(--surface)' }}>
-                    {item.type === 'item' ? <Box size={16} color="#D33682" /> : <Folder size={16} color="#2AA198" />}
+                    {item.type === 'item' ? <Box size={16} color="#A855F7" /> : <Folder size={16} color="#FF9800" />}
                   </div>
                 }
                 onClick={() => doBind(item)}

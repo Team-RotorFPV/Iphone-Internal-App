@@ -72,7 +72,7 @@ export default function ManageTeamScreen() {
 
   const handleSave = async () => {
     if (!formData.userId) {
-      toast.error('A User ID / Account Email is required.');
+      toast.error('A User ID / Account Email is required to assign this role.');
       return;
     }
     setIsSaving(true);
@@ -95,9 +95,9 @@ export default function ManageTeamScreen() {
 
   const getCategoryIcon = (category) => {
     const cat = (category || '').toLowerCase();
-    if (cat === 'leaders') return <Award size={18} color="#D33682" />;
-    if (cat === 'technical') return <Wrench size={18} color="#2AA198" />;
-    return <Briefcase size={18} color="#859900" />;
+    if (cat === 'leaders') return <Award size={18} color="#A855F7" />;
+    if (cat === 'technical') return <Wrench size={18} color="#FF9800" />;
+    return <Briefcase size={18} color="#66BB6A" />;
   };
 
   const getCategoryBadgeVariant = (category) => {
@@ -108,7 +108,7 @@ export default function ManageTeamScreen() {
   };
 
   return (
-    <Screen title="Manage Board">
+    <Screen title="Manage Team">
       <div className="row gap-sm" style={{ marginBottom: 12, overflowX: 'auto' }}>
         <span className="t-caption" style={{ fontWeight: 600, flexShrink: 0 }}>Roster Year</span>
         {years.map((y) => (
@@ -138,7 +138,7 @@ export default function ManageTeamScreen() {
               title={getUserDetails(item.userId)}
               description={`${item.role || 'Team Member'} • Order #${item.order}`}
               leftIcon={
-                <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: item.category === 'leaders' ? '#D3368215' : '#2AA19815' }}>
+                <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: item.category === 'leaders' ? '#A855F715' : '#FF980015' }}>
                   {getCategoryIcon(item.category)}
                 </div>
               }
@@ -174,14 +174,14 @@ export default function ManageTeamScreen() {
           placeholder="e.g. member@rotorfpv.com or User ID"
           autoFocus={!editingId}
         />
-        <AppInput label="Assigned Role / Title" value={formData.role} onChangeText={(t) => setFormData({ ...formData, role: t })} placeholder="e.g. CAPTAIN, DRONE PILOT" />
+        <AppInput label="Assigned Role / Title" value={formData.role} onChangeText={(t) => setFormData({ ...formData, role: t })} placeholder="e.g. CAPTAIN, DRONE PILOT, HARDWARE LEAD" />
         <AppInput label="Roster Category" value={formData.category} onChangeText={(t) => setFormData({ ...formData, category: t })} placeholder="leaders / technical / essential" />
         <AppInput label="Display Priority Order" value={String(formData.order)} onChangeText={(t) => setFormData({ ...formData, order: t })} inputMode="numeric" placeholder="0" />
 
         <div className="row-between" style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: 16, borderRadius: 12, marginTop: 8 }}>
           <div className="grow" style={{ marginRight: 12 }}>
             <div className="row gap-xs">
-              {formData.isActive ? <Eye size={16} color="#859900" /> : <EyeOff size={16} color="#DC322F" />}
+              {formData.isActive ? <Eye size={16} color="#66BB6A" /> : <EyeOff size={16} color="#F44336" />}
               <span className="t-body" style={{ fontWeight: 600 }}>Active Roster Status</span>
             </div>
             <div className="t-caption">When disabled, this member is hidden from the public team page.</div>

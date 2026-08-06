@@ -253,7 +253,7 @@ export default function FolderDetailScreen() {
           const effectiveHolder = resolveEffectiveHolder(currentInventory, 'inventory', allInvs);
           const iHoldFolder = currentInventory.currentHolder && currentInventory.currentHolder === user?.email;
           return (
-            <AppSection title="Self-Custody & QR Tag" style={{ marginTop: 18 }}>
+            <AppSection title="Assignment & Custody" style={{ marginTop: 18 }}>
               <div className="row-between">
                 <div className="grow">
                   <div className="detail-label">Held by</div>
@@ -271,11 +271,16 @@ export default function FolderDetailScreen() {
                     Release
                   </AppButton>
                 ) : (
-                  <AppButton variant="primary" size="sm" onClick={handleHoldFolder} loading={custodyBusy} icon={<UserCheck size={14} color="#002B36" />}>
+                  <AppButton variant="primary" size="sm" onClick={handleHoldFolder} loading={custodyBusy} icon={<UserCheck size={14} color="#121212" />}>
                     Hold this
                   </AppButton>
                 )}
               </div>
+              <Row label="Room / Location" value={currentInventory.currentRoom || 'Not specified'} />
+              <Row
+                label="Assigned Date"
+                value={currentInventory.currentAssignedDate ? new Date(currentInventory.currentAssignedDate).toLocaleDateString() : 'N/A'}
+              />
               <div className="detail-row" style={{ marginTop: 12 }}>
                 <span className="detail-label">QR Tag</span>
                 <span className="row gap-sm">
@@ -288,16 +293,6 @@ export default function FolderDetailScreen() {
             </AppSection>
           );
         })()}
-
-        <AppSection title="Assignment & Custody" style={{ marginTop: 18 }}>
-          <Row label="Current Holder" value={holderNameFor(currentInventory.currentHolder)} />
-          <Row label="Room / Location" value={currentInventory.currentRoom || 'Not specified'} />
-          <Row
-            label="Assigned Date"
-            value={currentInventory.currentAssignedDate ? new Date(currentInventory.currentAssignedDate).toLocaleDateString() : 'N/A'}
-            last
-          />
-        </AppSection>
 
         {currentInventory.previousHolder && (
           <AppSection title="Previous Custody" style={{ marginTop: 16 }}>
@@ -345,13 +340,13 @@ export default function FolderDetailScreen() {
                 </span>
               ) : (
                 <div className="icon-well" style={wellStyle('rgba(148,163,184,0.12)')}>
-                  <Folder size={18} color="#2AA198" />
+                  <Folder size={18} color="#FF9800" />
                 </div>
               )
             }
             rightElement={<AppBadge variant={getStatusBadgeVariant(status)}>{status}</AppBadge>}
             showChevron={!isSelectionMode}
-            style={isSelected ? { background: 'rgba(38, 139, 210,0.06)' } : undefined}
+            style={isSelected ? { background: 'rgba(255, 152, 0,0.06)' } : undefined}
             onClick={() => (isSelectionMode ? toggleSelection(item.id) : goFolder(item))}
           />
         );
@@ -380,8 +375,8 @@ export default function FolderDetailScreen() {
                   {isSelected ? <CheckSquare size={20} color="var(--accent)" /> : <Square size={20} color="var(--text-secondary)" />}
                 </span>
               ) : (
-                <div className="icon-well" style={wellStyle('#D3368215')}>
-                  <Box size={18} color="#D33682" />
+                <div className="icon-well" style={wellStyle('#A855F715')}>
+                  <Box size={18} color="#A855F7" />
                 </div>
               )
             }
@@ -398,7 +393,7 @@ export default function FolderDetailScreen() {
                     })
                 : undefined
             }
-            style={isSelected ? { background: 'rgba(38, 139, 210,0.06)' } : undefined}
+            style={isSelected ? { background: 'rgba(255, 152, 0,0.06)' } : undefined}
           />
         );
       })
@@ -414,13 +409,13 @@ export default function FolderDetailScreen() {
       history.map((item) => {
         let accent = 'var(--accent)';
         const action = item.action || '';
-        if (action.includes('Holder Assigned')) accent = '#859900';
-        else if (action.includes('Holder Removed')) accent = '#DC322F';
+        if (action.includes('Holder Assigned')) accent = '#66BB6A';
+        else if (action.includes('Holder Removed')) accent = '#F44336';
         else if (action.includes('Item Added')) accent = '#3B82F6';
-        else if (action.includes('Quantity Edited')) accent = '#B58900';
-        else if (action.includes('Item Renamed')) accent = '#D33682';
+        else if (action.includes('Quantity Edited')) accent = '#FFC107';
+        else if (action.includes('Item Renamed')) accent = '#A855F7';
         else if (action.includes('Item Moved')) accent = '#F97316';
-        else if (action.includes('Deleted')) accent = '#DC322F';
+        else if (action.includes('Deleted')) accent = '#F44336';
         return (
           <AppCard key={item.id} variant="surface" style={{ borderLeft: `4px solid ${accent}`, marginBottom: 12 }}>
             <div className="row-between">
@@ -452,9 +447,9 @@ export default function FolderDetailScreen() {
         variant={isSelectionMode ? 'primary' : 'secondary'}
         size="sm"
         onClick={() => (isSelectionMode ? handleSelectAll() : setIsSelectionMode(true))}
-        icon={<CheckSquare size={14} color={isSelectionMode ? '#002B36' : undefined} />}
+        icon={<CheckSquare size={14} color={isSelectionMode ? '#121212' : undefined} />}
       >
-        {isSelectionMode ? (allSelected ? 'Deselect' : 'All') : 'Select'}
+        {isSelectionMode ? (allSelected ? 'Deselect All' : 'Select All') : 'Select'}
       </AppButton>
       {isSelectionMode && (
         <button
@@ -532,7 +527,7 @@ export default function FolderDetailScreen() {
             variant="primary"
             size="sm"
             onClick={() => setIsMoveModalVisible(true)}
-            icon={<ArrowRightLeft size={14} color="#002B36" />}
+            icon={<ArrowRightLeft size={14} color="#121212" />}
           >
             Move Selected
           </AppButton>
@@ -661,8 +656,8 @@ export default function FolderDetailScreen() {
                 title={item.name || item.email}
                 description={item.roomNumber ? `Room / Location: ${item.roomNumber}` : 'No room specified'}
                 leftIcon={
-                  <div className="icon-well" style={wellStyle('#85990015')}>
-                    <User size={18} color="#859900" />
+                  <div className="icon-well" style={wellStyle('#66BB6A15')}>
+                    <User size={18} color="#66BB6A" />
                   </div>
                 }
                 onClick={async () => {
@@ -704,7 +699,7 @@ export default function FolderDetailScreen() {
           </AppButton>
           <AppButton
             variant="secondary"
-            icon={<CheckCircle2 size={18} color="#859900" />}
+            icon={<CheckCircle2 size={18} color="#66BB6A" />}
             onClick={() => {
               setIsActionsModalVisible(false);
               InventoryService.updateInventoryStatus(inventoryId, 'Available');
@@ -715,7 +710,7 @@ export default function FolderDetailScreen() {
           </AppButton>
           <AppButton
             variant="secondary"
-            icon={<AlertTriangle size={18} color="#B58900" />}
+            icon={<AlertTriangle size={18} color="#FFC107" />}
             onClick={() => {
               setIsActionsModalVisible(false);
               InventoryService.updateInventoryStatus(inventoryId, 'Missing');
@@ -739,11 +734,11 @@ export default function FolderDetailScreen() {
           <div className="divider" style={{ margin: '6px 0' }} />
           <AppButton
             variant="danger"
-            icon={<Trash2 size={18} color="#DC322F" />}
+            icon={<Trash2 size={18} color="#F44336" />}
             onClick={() => {
               setIsActionsModalVisible(false);
               if (subInventories.length > 0 || items.length > 0) {
-                toast.error('Cannot delete a folder that still contains items or sub-folders.');
+                toast.error('Cannot delete a folder that still contains equipment items or sub-folders.');
               } else {
                 InventoryService.deleteInventory(inventoryId);
                 navigate(-1);

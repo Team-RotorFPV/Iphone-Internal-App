@@ -52,7 +52,7 @@ export default function ManageEventsScreen() {
 
   const handlePickImage = async () => {
     if (!formData.name) {
-      toast.error('Please enter an event name first.');
+      toast.error('Please enter an event name first so we can create a designated storage folder for it.');
       return;
     }
     setIsSaving(true);
@@ -68,7 +68,7 @@ export default function ManageEventsScreen() {
 
   const handleSave = async () => {
     if (!formData.name || !formData.image) {
-      toast.error('Event Name and Cover Image are required.');
+      toast.error('Event Name and Cover Image are required fields.');
       return;
     }
     setIsSaving(true);
@@ -96,7 +96,7 @@ export default function ManageEventsScreen() {
           <AppSkeleton width="100%" height={80} />
         </div>
       ) : events.length === 0 ? (
-        <AppEmptyState title="No events scheduled" description="You haven't created any events for the website yet." actionLabel="Add First Event" onAction={openAddModal} />
+        <AppEmptyState title="No events scheduled" description="You haven't created any upcoming or past events for the website yet." actionLabel="Add First Event" onAction={openAddModal} />
       ) : (
         events.map((item) => {
           const badgeVariant = !item.isActive ? 'danger' : item.status === 'upcoming' ? 'success' : 'secondary';
@@ -110,8 +110,8 @@ export default function ManageEventsScreen() {
                 item.image ? (
                   <img className="thumb" src={item.image} alt="" style={{ width: 44, height: 44 }} />
                 ) : (
-                  <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#2AA19815' }}>
-                    <Calendar size={18} color="#2AA198" />
+                  <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#FF980015' }}>
+                    <Calendar size={18} color="#FF9800" />
                   </div>
                 )
               }
@@ -140,16 +140,16 @@ export default function ManageEventsScreen() {
           </div>
         }
       >
-        <AppInput label="Event Name" value={formData.name} onChangeText={(t) => setFormData({ ...formData, name: t })} placeholder="e.g. AUVSI SUAS 2026" />
+        <AppInput label="Event Name" value={formData.name} onChangeText={(t) => setFormData({ ...formData, name: t })} placeholder="e.g. AUVSI SUAS 2026 or Drone Racing League" />
         <AppInput label="Status" value={formData.status} onChangeText={(t) => setFormData({ ...formData, status: t })} placeholder="upcoming or past" />
         <AppInput label="Display Order (priority)" value={String(formData.order)} onChangeText={(t) => setFormData({ ...formData, order: t })} inputMode="numeric" placeholder="0" />
-        <AppInput label="Short Summary" value={formData.description} onChangeText={(t) => setFormData({ ...formData, description: t })} placeholder="Brief overview" multiline numberOfLines={2} />
-        <AppInput label="Detailed Description" value={formData.longDescription} onChangeText={(t) => setFormData({ ...formData, longDescription: t })} placeholder="Full event details" multiline numberOfLines={4} />
+        <AppInput label="Short Summary" value={formData.description} onChangeText={(t) => setFormData({ ...formData, description: t })} placeholder="Brief overview displayed on event cards" multiline numberOfLines={2} />
+        <AppInput label="Detailed Description" value={formData.longDescription} onChangeText={(t) => setFormData({ ...formData, longDescription: t })} placeholder="Full event details and schedule" multiline numberOfLines={4} />
 
         <div className="row-between" style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: 16, borderRadius: 12, marginTop: 8 }}>
           <div className="grow" style={{ marginRight: 12 }}>
             <div className="row gap-xs">
-              {formData.isActive ? <Eye size={16} color="#859900" /> : <EyeOff size={16} color="#DC322F" />}
+              {formData.isActive ? <Eye size={16} color="#66BB6A" /> : <EyeOff size={16} color="#F44336" />}
               <span className="t-body" style={{ fontWeight: 600 }}>Publicly Visible</span>
             </div>
             <div className="t-caption">When disabled, this event is hidden from the public website.</div>
@@ -162,7 +162,7 @@ export default function ManageEventsScreen() {
             {formData.image ? <img src={formData.image} alt="" /> : (<><ImageIcon size={32} /><span className="t-caption">No cover image uploaded yet.</span></>)}
           </div>
           {formData.image && (
-            <div className="meta-line" style={{ color: '#859900', marginBottom: 12 }}>
+            <div className="meta-line" style={{ color: '#66BB6A', marginBottom: 12 }}>
               <CheckCircle2 size={14} /> Uploaded to Cloud Storage
             </div>
           )}

@@ -187,7 +187,7 @@
   padding: 7px 12px;
   border-radius: var(--r-pill);
   border: 1px solid var(--accent);
-  background: rgba(38, 139, 210, 0.08);
+  background: rgba(255, 152, 0, 0.08);
   color: var(--accent);
   font-size: 13px;
   font-weight: 700;
@@ -289,7 +289,7 @@
 }
 .icon-tile.selected {
   border-color: var(--accent);
-  background: rgba(38, 139, 210, 0.12);
+  background: rgba(255, 152, 0, 0.12);
 }
 
 /* Tag select card (team members modal) */

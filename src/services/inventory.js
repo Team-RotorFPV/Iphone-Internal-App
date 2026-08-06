@@ -348,7 +348,10 @@ export const InventoryService = {
   // reverts the item to inheriting its parent folder's holder. Effective holder
   // is computed in lib/custody.js, never denormalised.
 
-  holdItem: async (itemId, holderEmail) => {
+  // `room` is optional. Self-hold passes the acting user's room; "Assign Team
+  // Holder" passes the chosen member's room — mirroring folder assignHolder so
+  // items carry the same currentRoom / currentAssignedDate custody fields.
+  holdItem: async (itemId, holderEmail, room) => {
     const userEmail = getUserEmail();
     const now = new Date().toISOString();
 
@@ -358,8 +361,12 @@ export const InventoryService = {
 
     await updateDoc(doc(db, 'items', itemId), {
       currentHolder: holderEmail,
+      currentRoom: room || itemData?.currentRoom || 'Unknown',
+      currentAssignedDate: now,
       currentHolderSince: now,
       previousHolder,
+      previousRoom: itemData?.currentRoom || null,
+      previousAssignedDate: itemData?.currentAssignedDate || null,
       updatedAt: now,
       updatedBy: userEmail,
     });
@@ -371,6 +378,7 @@ export const InventoryService = {
       action: 'held',
       previousHolder,
       newHolder: holderEmail,
+      roomId: room || itemData?.currentRoom || 'Unknown',
       userId: userEmail,
       timestamp: now,
     });
@@ -390,7 +398,11 @@ export const InventoryService = {
     await updateDoc(doc(db, 'items', itemId), {
       currentHolder: null,
       currentHolderSince: null,
+      currentRoom: null,
+      currentAssignedDate: null,
       previousHolder,
+      previousRoom: itemData?.currentRoom || null,
+      previousAssignedDate: itemData?.currentAssignedDate || null,
       updatedAt: now,
       updatedBy: userEmail,
     });

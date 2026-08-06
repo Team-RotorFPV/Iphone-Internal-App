@@ -50,7 +50,7 @@ export default function ManageAchievementsScreen() {
 
   const handlePickImage = async () => {
     if (!formData.title) {
-      toast.error('Please enter an achievement title first.');
+      toast.error('Please enter an achievement title first so we can create a designated storage folder.');
       return;
     }
     setIsSaving(true);
@@ -115,7 +115,7 @@ export default function ManageAchievementsScreen() {
                   <img className="thumb" src={item.images[0]} alt="" style={{ width: 44, height: 44 }} />
                 ) : (
                   <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--accent-muted)' }}>
-                    <Trophy size={20} color="#268BD2" />
+                    <Trophy size={20} color="#FF9800" />
                   </div>
                 )
               }
@@ -144,17 +144,17 @@ export default function ManageAchievementsScreen() {
           </div>
         }
       >
-        <AppInput label="Award / Milestone Title" value={formData.title} onChangeText={(t) => setFormData({ ...formData, title: t })} placeholder="e.g. 1st Place Autonomous Navigation" />
-        <AppInput label="Competition Year" value={formData.year} onChangeText={(t) => setFormData({ ...formData, year: t })} placeholder="e.g. 2025" />
+        <AppInput label="Award / Milestone Title" value={formData.title} onChangeText={(t) => setFormData({ ...formData, title: t })} placeholder="e.g. 1st Place Autonomous Navigation - AUVSI SUAS" />
+        <AppInput label="Competition Year" value={formData.year} onChangeText={(t) => setFormData({ ...formData, year: t })} placeholder="e.g. 2025 or 2024-2025" />
         <AppInput label="Display Priority Order" value={String(formData.order)} onChangeText={(t) => setFormData({ ...formData, order: t })} inputMode="numeric" placeholder="0" />
-        <AppInput label="Description & Context" value={formData.description} onChangeText={(t) => setFormData({ ...formData, description: t })} placeholder="Details about the competition" multiline numberOfLines={3} />
+        <AppInput label="Description & Context" value={formData.description} onChangeText={(t) => setFormData({ ...formData, description: t })} placeholder="Details about the competition, vehicle used, or scores achieved" multiline numberOfLines={3} />
 
         <AppSection title="Award Photograph" style={{ marginTop: 18 }}>
           <div className="upload-tile" style={{ marginBottom: 12 }}>
             {formData.images?.length ? <img src={formData.images[0]} alt="" /> : (<><Award size={32} /><span className="t-caption">No award photo uploaded yet.</span></>)}
           </div>
           {formData.images?.length > 0 && (
-            <div className="meta-line" style={{ color: '#859900', marginBottom: 12 }}>
+            <div className="meta-line" style={{ color: '#66BB6A', marginBottom: 12 }}>
               <CheckCircle2 size={14} /> Uploaded to Cloud Storage
             </div>
           )}

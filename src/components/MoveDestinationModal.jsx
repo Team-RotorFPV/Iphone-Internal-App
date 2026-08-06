@@ -156,9 +156,9 @@ export default function MoveDestinationModal({
 
                 <span className={`type-iconbox${isSelected ? ' sel' : ''}`}>
                   {isList ? (
-                    <ListFilter size={16} color={isSelected ? '#268BD2' : 'var(--accent)'} />
+                    <ListFilter size={16} color={isSelected ? '#FF9800' : 'var(--accent)'} />
                   ) : (
-                    <Folder size={16} color={isSelected ? '#268BD2' : '#2AA198'} />
+                    <Folder size={16} color={isSelected ? '#FF9800' : '#FF9800'} />
                   )}
                 </span>
 
@@ -171,7 +171,7 @@ export default function MoveDestinationModal({
 
                 {invalid ? (
                   <span className="badge-invalid">
-                    <Ban size={12} color="#DC322F" />
+                    <Ban size={12} color="#F44336" />
                     Invalid
                   </span>
                 ) : isSelected ? (

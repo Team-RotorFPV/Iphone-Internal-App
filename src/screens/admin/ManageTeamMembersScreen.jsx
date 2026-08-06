@@ -207,27 +207,27 @@ export default function ManageTeamMembersScreen() {
   const renderMember = (item) => (
     <AppCard key={item.email} variant="surface" onClick={item.isArchived ? undefined : () => openEditModal(item)} style={{ marginBottom: 10 }}>
       <div className="row-between">
-        <div className="row gap-md grow">
-          <div className="avatar" style={{ width: 44, height: 44, border: '1px solid var(--border)' }}>
+        <div className="row gap-md grow" style={{ minWidth: 0 }}>
+          <div className="avatar" style={{ width: 44, height: 44, border: '1px solid var(--border)', flexShrink: 0 }}>
             {item.image ? <img src={item.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User size={20} color="var(--text-secondary)" />}
           </div>
-          <div className="grow">
-            <div className="row gap-xs">
-              <span className="t-body" style={{ fontWeight: 600 }}>{item.name || item.email}</span>
+          <div className="grow" style={{ minWidth: 0 }}>
+            <div className="row gap-xs" style={{ minWidth: 0 }}>
+              <span className="t-body" style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{item.name || item.email}</span>
               {item.isOrphanedAdmin && <AppBadge variant="warning">ORPHANED</AppBadge>}
             </div>
-            <div className="t-caption">{item.email}</div>
+            <div className="t-caption" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.email}</div>
           </div>
         </div>
-        <div className="row gap-sm" onClick={(e) => e.stopPropagation()}>
+        <div className="row gap-sm" style={{ flexShrink: 0 }} onClick={(e) => e.stopPropagation()}>
           {item.isArchived ? (
             <>
               <AppBadge variant="danger">ARCHIVED</AppBadge>
               <button type="button" className="icon-well" style={{ width: 32, height: 32, background: 'var(--elevated)' }} onClick={() => handleRestoreUser(item.email)}>
-                <RotateCcw size={16} color="#859900" />
+                <RotateCcw size={16} color="#66BB6A" />
               </button>
-              <button type="button" className="icon-well" style={{ width: 32, height: 32, background: '#DC322F15', borderColor: '#DC322F30' }} onClick={() => handleDeleteUser(item.email)}>
-                <Trash2 size={16} color="#DC322F" />
+              <button type="button" className="icon-well" style={{ width: 32, height: 32, background: '#F4433615', borderColor: '#F4433630' }} onClick={() => handleDeleteUser(item.email)}>
+                <Trash2 size={16} color="#F44336" />
               </button>
             </>
           ) : (
@@ -278,18 +278,18 @@ export default function ManageTeamMembersScreen() {
       ) : (
         <>
           {joinRequests.length > 0 && (
-            <div style={{ marginBottom: 20, background: 'rgba(25,24,37,0.4)', padding: 16, borderRadius: 20, border: '1px solid #B5890040' }}>
+            <div style={{ marginBottom: 20, background: 'rgba(25,24,37,0.4)', padding: 16, borderRadius: 20, border: '1px solid #FFC10740' }}>
               <div className="row gap-md" style={{ marginBottom: 14 }}>
-                <div className="icon-well" style={{ width: 40, height: 40, borderRadius: 12, background: '#B5890015' }}>
-                  <AlertTriangle size={18} color="#B58900" />
+                <div className="icon-well" style={{ width: 40, height: 40, borderRadius: 12, background: '#FFC10715' }}>
+                  <AlertTriangle size={18} color="#FFC107" />
                 </div>
                 <div className="grow">
-                  <div className="t-body" style={{ fontWeight: 600, color: '#B58900' }}>Pending Join Applications ({joinRequests.length})</div>
+                  <div className="t-body" style={{ fontWeight: 600, color: '#FFC107' }}>Pending Join Applications ({joinRequests.length})</div>
                   <div className="t-caption">Review applicants wishing to join the team</div>
                 </div>
               </div>
               {joinRequests.map((req) => (
-                <AppCard key={req.id} variant="elevated" style={{ border: '1px solid #B5890030' }}>
+                <AppCard key={req.id} variant="elevated" style={{ border: '1px solid #FFC10730' }}>
                   <div className="row-between" style={{ alignItems: 'flex-start', marginBottom: 10 }}>
                     <div className="grow">
                       <div className="t-body" style={{ fontWeight: 600 }}>{req.name || 'Anonymous Applicant'}</div>
@@ -308,7 +308,7 @@ export default function ManageTeamMembersScreen() {
                     </div>
                   )}
                   <div className="row gap-sm">
-                    <AppButton variant="ghost" size="sm" onClick={() => handleRejectRequest(req.id)} style={{ flex: 1 }} icon={<UserX size={14} color="#DC322F" />}>Reject</AppButton>
+                    <AppButton variant="ghost" size="sm" onClick={() => handleRejectRequest(req.id)} style={{ flex: 1 }} icon={<UserX size={14} color="#F44336" />}>Reject</AppButton>
                     <AppButton variant="primary" size="sm" onClick={() => handleApproveRequest(req)} style={{ flex: 1 }} icon={<UserCheck size={14} color="var(--bg)" />}>Approve</AppButton>
                   </div>
                 </AppCard>
@@ -375,7 +375,7 @@ export default function ManageTeamMembersScreen() {
                   style={isSelected ? { background: 'var(--accent-muted)', borderColor: 'var(--accent)' } : undefined}
                   onClick={() => toggleTag(tag.id)}
                 >
-                  {isSelected ? <CheckSquare size={16} color="#268BD2" /> : <Square size={16} color="var(--text-muted)" />}
+                  {isSelected ? <CheckSquare size={16} color="#FF9800" /> : <Square size={16} color="var(--text-muted)" />}
                   <span style={{ color: isSelected ? '#fff' : 'var(--text-primary)' }}>{tag.name}</span>
                 </button>
               );

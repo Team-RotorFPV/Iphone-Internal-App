@@ -133,12 +133,12 @@ export default function InventoryDetailScreen() {
                   )}
                 </span>
               ) : (
-                iconBox(<Folder size={18} color="#2AA198" />)
+                iconBox(<Folder size={18} color="#FF9800" />)
               )
             }
             rightElement={<AppBadge variant={getStatusBadgeVariant(status)}>{status}</AppBadge>}
             showChevron={!isSelectionMode}
-            style={isSelected ? { background: 'rgba(38, 139, 210,0.06)' } : undefined}
+            style={isSelected ? { background: 'rgba(255, 152, 0,0.06)' } : undefined}
             onClick={() => (isSelectionMode ? toggleSelection(item.id) : goFolder(item))}
           />
         );
@@ -176,7 +176,7 @@ export default function InventoryDetailScreen() {
     }
 
     return combined.map((item) => {
-      let icon = <Folder size={18} color="#2AA198" />;
+      let icon = <Folder size={18} color="#FF9800" />;
       let subtitle = '';
       let onPress = () => {};
       if (item._type === 'folder') {
@@ -184,12 +184,12 @@ export default function InventoryDetailScreen() {
         subtitle = parentInv ? `Sub-folder • In ${parentInv.name}` : `Folder • In ${listName}`;
         onPress = () => goFolder(item);
       } else if (item._type === 'item') {
-        icon = <Box size={18} color="#D33682" />;
+        icon = <Box size={18} color="#A855F7" />;
         const parentInv = allInvs.find((i) => i.id === item.inventoryId);
         subtitle = `Item • Qty: ${item.quantity || 0}${parentInv ? ` • In ${parentInv.name}` : ''}`;
         onPress = () => goItem(item);
       } else if (item._type === 'user') {
-        icon = <User size={18} color="#859900" />;
+        icon = <User size={18} color="#66BB6A" />;
         const held = validInvs.filter(
           (inv) => inv.currentHolder?.toLowerCase() === item.email?.toLowerCase() || inv.currentHolder === item.id
         );
@@ -229,9 +229,9 @@ export default function InventoryDetailScreen() {
         variant={isSelectionMode ? 'primary' : 'secondary'}
         size="sm"
         onClick={() => (isSelectionMode ? handleSelectAll() : setIsSelectionMode(true))}
-        icon={<CheckSquare size={14} color={isSelectionMode ? '#002B36' : undefined} />}
+        icon={<CheckSquare size={14} color={isSelectionMode ? '#121212' : undefined} />}
       >
-        {isSelectionMode ? (allSelected ? 'Deselect' : 'All') : 'Select'}
+        {isSelectionMode ? (allSelected ? 'Deselect All' : 'Select All') : 'Select'}
       </AppButton>
       {isSelectionMode && (
         <button
@@ -283,7 +283,7 @@ export default function InventoryDetailScreen() {
             variant="primary"
             size="sm"
             onClick={() => setIsMoveModalVisible(true)}
-            icon={<ArrowRightLeft size={14} color="#002B36" />}
+            icon={<ArrowRightLeft size={14} color="#121212" />}
           >
             Move Selected
           </AppButton>

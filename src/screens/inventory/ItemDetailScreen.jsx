@@ -7,7 +7,7 @@ import { useAuthStore } from '../../stores/authStore';
 import AttachTagModal from '../../components/AttachTagModal';
 import { resolveEffectiveHolder } from '../../lib/custody';
 import { getHolderName } from '../../lib/inventoryHelpers';
-import { AppCard, AppSection, AppButton, AppInput, AppBadge, AppSkeleton } from '../../components/ui';
+import { AppCard, AppSection, AppButton, AppInput, AppBadge, AppSkeleton, AppModal, AppSearchBar, AppListItem } from '../../components/ui';
 import Screen from '../../components/Screen';
 import { alertConfirm, toast } from '../../lib/toast';
 import '../screens.css';
@@ -18,8 +18,12 @@ export default function ItemDetailScreen() {
   const navigate = useNavigate();
   const initialItemData = location.state?.itemData || null;
   const myEmail = useAuthStore((s) => s.user?.email);
+  const myRoom = useAuthStore((s) => s.user?.roomNumber);
+  const hasPermission = useAuthStore((s) => s.hasPermission);
 
   const [item, setItem] = useState(initialItemData);
+  const [assignVisible, setAssignVisible] = useState(false);
+  const [assignSearch, setAssignSearch] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({ name: '', quantity: '0', category: '' });
   const [saving, setSaving] = useState(false);
@@ -52,10 +56,25 @@ export default function ItemDetailScreen() {
   const doHold = async () => {
     try {
       setCustodyBusy(true);
-      await InventoryService.holdItem(itemId, myEmail);
+      await InventoryService.holdItem(itemId, myEmail, myRoom);
     } catch (error) {
       console.error('Error holding item:', error);
       toast.error('Could not hold this item. Please try again.');
+    } finally {
+      setCustodyBusy(false);
+    }
+  };
+
+  // Assign this item to another team member (uniform with folder custody).
+  const handleAssignHolder = async (member) => {
+    try {
+      setCustodyBusy(true);
+      await InventoryService.holdItem(itemId, member.email, member.roomNumber);
+      setAssignVisible(false);
+      setAssignSearch('');
+    } catch (e) {
+      console.error('Error assigning item:', e);
+      toast.error('Could not assign custody. Please try again.');
     } finally {
       setCustodyBusy(false);
     }
@@ -116,7 +135,7 @@ export default function ItemDetailScreen() {
   const handleDelete = () => {
     alertConfirm({
       title: 'Delete Equipment Item',
-      message: 'Permanently delete this item? This action cannot be undone.',
+      message: 'Are you sure you want to permanently delete this item? This action cannot be undone.',
       onConfirm: async () => {
         try {
           await InventoryService.deleteItem(itemId);
@@ -164,7 +183,7 @@ export default function ItemDetailScreen() {
       <div className="row-between" style={{ alignItems: 'flex-start', marginBottom: 8 }}>
         <div className="grow" style={{ marginRight: 12 }}>
           <div className="row gap-sm" style={{ marginBottom: 6 }}>
-            <Box size={18} color="#D33682" />
+            <Box size={18} color="#A855F7" />
             <AppBadge variant={item.quantity > 0 ? 'success' : 'danger'}>
               {item.quantity > 0 ? 'In Stock' : 'Depleted'}
             </AppBadge>
@@ -176,7 +195,7 @@ export default function ItemDetailScreen() {
         {!isEditing && (
           <div className="row gap-sm">
             <AppButton variant="secondary" size="sm" icon={<Edit2 size={14} />} onClick={handleEditToggle} />
-            <AppButton variant="danger" size="sm" icon={<Trash2 size={14} color="#DC322F" />} onClick={handleDelete} />
+            <AppButton variant="danger" size="sm" icon={<Trash2 size={14} color="#F44336" />} onClick={handleDelete} />
           </div>
         )}
       </div>
@@ -207,7 +226,7 @@ export default function ItemDetailScreen() {
             <AppButton variant="ghost" onClick={handleEditToggle} style={{ flex: 1 }} disabled={saving}>
               Cancel
             </AppButton>
-            <AppButton variant="primary" onClick={handleSave} style={{ flex: 1 }} loading={saving} icon={<Check size={16} color="#002B36" />}>
+            <AppButton variant="primary" onClick={handleSave} style={{ flex: 1 }} loading={saving} icon={<Check size={16} color="#121212" />}>
               Save Changes
             </AppButton>
           </div>
@@ -216,22 +235,22 @@ export default function ItemDetailScreen() {
         <>
           <div className="stat-row" style={{ marginTop: 16 }}>
             <AppCard variant="elevated" className="stat-pill" flush style={{ textAlign: 'left' }}>
-              <div className="icon-well" style={{ width: 36, height: 36, background: '#2AA19815', marginBottom: 12 }}>
-                <Hash size={18} color="#2AA198" />
+              <div className="icon-well" style={{ width: 36, height: 36, background: '#FF980015', marginBottom: 12 }}>
+                <Hash size={18} color="#FF9800" />
               </div>
               <div className="stat-label" style={{ textAlign: 'left' }}>Current Stock</div>
               <div className="stat-value" style={{ fontSize: 28, textAlign: 'left' }}>{item.quantity || 0}</div>
             </AppCard>
             <AppCard variant="elevated" className="stat-pill" flush style={{ textAlign: 'left' }}>
-              <div className="icon-well" style={{ width: 36, height: 36, background: '#D3368215', marginBottom: 12 }}>
-                <Tag size={18} color="#D33682" />
+              <div className="icon-well" style={{ width: 36, height: 36, background: '#A855F715', marginBottom: 12 }}>
+                <Tag size={18} color="#A855F7" />
               </div>
               <div className="stat-label" style={{ textAlign: 'left' }}>Category</div>
               <div className="stat-value" style={{ fontSize: 20, textAlign: 'left' }}>{item.category || 'General'}</div>
             </AppCard>
           </div>
 
-          <AppSection title="Custody" style={{ marginTop: 18 }}>
+          <AppSection title="Assignment & Custody" style={{ marginTop: 18 }}>
             <div className="row-between">
               <div className="grow">
                 <div className="detail-label">Held by</div>
@@ -249,11 +268,32 @@ export default function ItemDetailScreen() {
                   Release
                 </AppButton>
               ) : (
-                <AppButton variant="primary" size="sm" onClick={handleHold} loading={custodyBusy} icon={<UserCheck size={14} color="#002B36" />}>
+                <AppButton variant="primary" size="sm" onClick={handleHold} loading={custodyBusy} icon={<UserCheck size={14} color="#121212" />}>
                   Hold this
                 </AppButton>
               )}
             </div>
+            <div className="detail-row" style={{ marginTop: 12 }}>
+              <span className="detail-label">Room / Location</span>
+              <span className="detail-value">{item.currentRoom || 'Not specified'}</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Assigned Date</span>
+              <span className="detail-value">
+                {item.currentAssignedDate ? new Date(item.currentAssignedDate).toLocaleDateString() : 'N/A'}
+              </span>
+            </div>
+            {hasPermission?.('inventory') && (
+              <AppButton
+                variant="secondary"
+                fullWidth
+                icon={<UserCheck size={16} />}
+                onClick={() => setAssignVisible(true)}
+                style={{ marginTop: 12 }}
+              >
+                Assign Team Holder
+              </AppButton>
+            )}
             <div className="detail-row" style={{ marginTop: 12 }}>
               <span className="detail-label">QR Tag</span>
               <span className="row gap-sm">
@@ -282,6 +322,46 @@ export default function ItemDetailScreen() {
         entity={{ type: 'item', id: itemId, name: item.name }}
         onClose={() => setTagModalOpen(false)}
       />
+
+      <AppModal visible={assignVisible} onClose={() => setAssignVisible(false)} title="Assign Item Custody" expanded>
+        <p className="t-body-secondary" style={{ marginTop: 0, marginBottom: 16 }}>
+          Select a team member to take custody and accountability for this item.
+        </p>
+        <AppSearchBar placeholder="Search team members..." value={assignSearch} onChangeText={setAssignSearch} />
+        <div>
+          {usersList.filter(
+            (u) =>
+              u.isArchived !== true &&
+              u.isActive !== false &&
+              ((u.name?.toLowerCase().includes(assignSearch.toLowerCase())) ||
+                (u.email?.toLowerCase().includes(assignSearch.toLowerCase())))
+          ).length === 0 ? (
+            <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 20 }}>No matching users found.</p>
+          ) : (
+            usersList
+              .filter(
+                (u) =>
+                  u.isArchived !== true &&
+                  u.isActive !== false &&
+                  ((u.name?.toLowerCase().includes(assignSearch.toLowerCase())) ||
+                    (u.email?.toLowerCase().includes(assignSearch.toLowerCase())))
+              )
+              .map((member) => (
+                <AppListItem
+                  key={member.id}
+                  title={member.name || member.email}
+                  description={member.roomNumber ? `Room / Location: ${member.roomNumber}` : 'No room specified'}
+                  leftIcon={
+                    <div className="icon-well" style={{ width: 40, height: 40, background: '#66BB6A15' }}>
+                      <User size={18} color="#66BB6A" />
+                    </div>
+                  }
+                  onClick={() => handleAssignHolder(member)}
+                />
+              ))
+          )}
+        </div>
+      </AppModal>
     </Screen>
   );
 }

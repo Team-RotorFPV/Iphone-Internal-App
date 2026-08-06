@@ -101,7 +101,7 @@ export default function ManageHomeSettingsScreen() {
   const handleRevertHomeVideo = () => {
     alertConfirm({
       title: 'Revert to Default',
-      message: 'Remove the custom background video and revert to the default?',
+      message: 'Are you sure you want to remove the custom background video and revert to the default?',
       onConfirm: async () => {
         setIsSavingVideo(true);
         try {
@@ -125,7 +125,7 @@ export default function ManageHomeSettingsScreen() {
       <AppSection title="Home Page Background Video">
         <div className="row gap-md" style={{ marginBottom: 16 }}>
           <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--accent-muted)' }}>
-            <Video size={20} color="#268BD2" />
+            <Video size={20} color="#FF9800" />
           </div>
           <div className="grow">
             <div className="t-body" style={{ fontWeight: 600 }}>Hero Reel Stream</div>
@@ -154,7 +154,7 @@ export default function ManageHomeSettingsScreen() {
 
         <div className="row gap-sm">
           {!!homeSettings?.backgroundVideoUrl && (
-            <AppButton variant="danger" icon={<RotateCcw size={16} color="#DC322F" />} style={{ flex: 1 }} onClick={handleRevertHomeVideo} disabled={isUploading || isSavingVideo}>
+            <AppButton variant="danger" icon={<RotateCcw size={16} color="#F44336" />} style={{ flex: 1 }} onClick={handleRevertHomeVideo} disabled={isUploading || isSavingVideo}>
               Revert Default
             </AppButton>
           )}
@@ -166,8 +166,8 @@ export default function ManageHomeSettingsScreen() {
 
       <AppSection title="About Us Section & Mission" style={{ marginTop: 18 }}>
         <div className="row gap-md" style={{ marginBottom: 16 }}>
-          <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#D3368215' }}>
-            <FileText size={20} color="#D33682" />
+          <div className="icon-well" style={{ width: 44, height: 44, borderRadius: 12, background: '#A855F715' }}>
+            <FileText size={20} color="#A855F7" />
           </div>
           <div className="grow">
             <div className="t-body" style={{ fontWeight: 600 }}>Team Narrative</div>
@@ -181,7 +181,7 @@ export default function ManageHomeSettingsScreen() {
           onChangeText={setAboutUs}
           multiline
           numberOfLines={8}
-          placeholder="Tell visitors about Team Rotor FPV..."
+          placeholder="Tell visitors about Team Rotor FPV, our engineering focus, and drone projects..."
         />
         <AppButton variant="primary" onClick={handleAboutSubmit} loading={isSavingAbout} disabled={isSavingAbout} fullWidth>
           Save About Us Text

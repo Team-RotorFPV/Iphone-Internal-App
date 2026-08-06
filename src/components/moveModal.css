@@ -21,7 +21,7 @@
   cursor: pointer;
 }
 .node-row.selected {
-  background: rgba(38, 139, 210, 0.15);
+  background: rgba(255, 152, 0, 0.15);
 }
 .node-row.disabled {
   opacity: 0.45;
@@ -48,8 +48,8 @@
   flex-shrink: 0;
 }
 .type-iconbox.sel {
-  background: #268BD220;
-  border-color: #268BD240;
+  background: #FF980020;
+  border-color: #FF980040;
 }
 .node-name {
   display: block;
@@ -80,11 +80,11 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #DC322F15;
+  background: #F4433615;
   padding: 2px 6px;
   border-radius: var(--r-sm);
-  border: 1px solid #DC322F30;
-  color: #DC322F;
+  border: 1px solid #F4433630;
+  color: #F44336;
   font-size: 10px;
   font-weight: 700;
   flex-shrink: 0;

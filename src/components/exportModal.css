@@ -13,7 +13,7 @@
   transition: background 0.12s ease, border-color 0.12s ease;
 }
 .opt-card.active {
-  background: rgba(38, 139, 210, 0.07);
+  background: rgba(255, 152, 0, 0.07);
   border-color: var(--accent);
 }
 .opt-head {
@@ -55,12 +55,12 @@
   font-weight: 600;
 }
 .result-box.success {
-  background: #85990015;
-  border-color: #85990040;
-  color: #859900;
+  background: #66BB6A15;
+  border-color: #66BB6A40;
+  color: #66BB6A;
 }
 .result-box.error {
-  background: #DC322F15;
-  border-color: #DC322F40;
-  color: #DC322F;
+  background: #F4433615;
+  border-color: #F4433640;
+  color: #F44336;
 }

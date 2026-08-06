@@ -119,7 +119,7 @@ export default function BulkScanModal({ visible, onClose, containerId, container
           ) : (
             staged.map((item) => (
               <div key={item.id} className="qr-staged-row">
-                {item.type === 'item' ? <Box size={16} color="#D33682" /> : <Folder size={16} color="#2AA198" />}
+                {item.type === 'item' ? <Box size={16} color="#A855F7" /> : <Folder size={16} color="#FF9800" />}
                 <span className="qr-staged-name">{item.name}</span>
                 <button type="button" onClick={() => removeStaged(item.id)} aria-label="Remove" style={{ display: 'flex' }}>
                   <X size={16} color="var(--text-muted)" />
@@ -133,7 +133,7 @@ export default function BulkScanModal({ visible, onClose, containerId, container
           onClick={commit}
           loading={committing}
           disabled={staged.length === 0}
-          icon={<Check size={16} color="#002B36" />}
+          icon={<Check size={16} color="#121212" />}
           fullWidth
           style={{ marginTop: 12 }}
         >
