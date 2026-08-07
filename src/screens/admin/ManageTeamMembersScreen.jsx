@@ -7,7 +7,7 @@ import { CustomFieldsService } from '../../services/customFields';
 import { JoinRequestsService } from '../../services/joinRequests';
 import { TagsService } from '../../services/tags';
 import { apiPost, fetchAdmins, syncUserPermissions } from '../../services/adminApi';
-import { expandTagIds, getGrantedTagIds } from '../../lib/tagGrants';
+import { expandTagIds, getGrantedTagIds, buildReadableMirrors } from '../../lib/tagGrants';
 import { AppSearchBar, AppChip, AppCard, AppButton, AppBadge, AppFAB, AppModal, AppInput, AppSkeleton, AppEmptyState, AppSection } from '../../components/ui';
 import Screen from '../../components/Screen';
 import { alertConfirm, toast } from '../../lib/toast';
@@ -137,7 +137,8 @@ export default function ManageTeamMembersScreen() {
         const res = await apiPost('/api/admin/users/create', { email, tags: finalTags, customFields: formData.customFields });
         if (!res.ok) throw new Error(res.data?.error || 'Failed to create user account.');
       } else {
-        const payload = { ...formData, tags: finalTags, updatedAt: new Date().toISOString() };
+        const { tagNames, customFieldsReadable } = buildReadableMirrors(finalTags, tags, formData.customFields, customFields);
+        const payload = { ...formData, tags: finalTags, tagNames, customFieldsReadable, updatedAt: new Date().toISOString() };
         await setDoc(doc(db, 'users', email), payload, { merge: true });
       }
       const currentAdmins = admins.length > 0 ? admins : await fetchAdmins();

@@ -6,7 +6,7 @@ import { UsersService } from '../../services/users';
 import { CustomFieldsService } from '../../services/customFields';
 import { TagsService } from '../../services/tags';
 import { apiPost, fetchAdmins, syncUserPermissions, logAdminAction } from '../../services/adminApi';
-import { expandTagIds, getGrantedTagIds } from '../../lib/tagGrants';
+import { expandTagIds, getGrantedTagIds, buildReadableMirrors } from '../../lib/tagGrants';
 import { pickAndUploadMedia, ownProfileFolder } from '../../lib/mediaUpload';
 import { AppCard, AppButton, AppInput, AppChip, AppBadge, AppSection, AppSkeleton } from '../../components/ui';
 import Screen from '../../components/Screen';
@@ -141,10 +141,14 @@ export default function ProfileScreen() {
         linkedin: text(editForm.linkedin),
         github: text(editForm.github),
         customFields: editCustomFields,
+        customFieldsReadable: buildReadableMirrors([], tags, editCustomFields, customFields).customFieldsReadable,
         email: authUser.email.toLowerCase(),
         updatedAt: new Date().toISOString(),
       };
-      if (isSuperAdmin) updatedData.tags = expandTagIds(editForm.tags || [], tags);
+      if (isSuperAdmin) {
+        updatedData.tags = expandTagIds(editForm.tags || [], tags);
+        updatedData.tagNames = buildReadableMirrors(updatedData.tags, tags, {}, customFields).tagNames;
+      }
 
       await UsersService.updateUser(authUser.email.toLowerCase(), updatedData, false, authUser.email.toLowerCase());
 
